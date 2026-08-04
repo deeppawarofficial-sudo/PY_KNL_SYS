@@ -1,0 +1,6 @@
+{
+  "name": "AI Knowledge Synthesizer",
+  "description": "Multi-paper research assistant that ingests, searches, chunks, and synthesizes 100+ research papers using RAG, vector similarity, and Gemini AI with exact citations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
