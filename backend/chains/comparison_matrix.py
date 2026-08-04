@@ -1,21 +1,17 @@
 import os
-from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_google_genai import ChatGoogleGenerativeAI
+import json
+from services.nemotron_llm import generate_nemotron_response
 
-def get_comparison_matrix_chain():
+async def run_comparison_matrix(paper_count: int, papers_json: str) -> list:
     """
-    Constructs a LangChain chain for evaluating indexed research papers
-    and returning a structured JSON comparison matrix.
+    Generates a structured JSON comparison matrix evaluating all papers using Nemotron LLM.
     """
-    api_key = os.getenv("GEMINI_API_KEY", "")
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=api_key if api_key else None,
-        temperature=0.1,
+    system_prompt = (
+        "You are an expert AI Benchmark Analyst. "
+        "Analyze the provided research papers and output ONLY a valid JSON object matching the requested schema."
     )
 
-    template = """Analyze these {paper_count} research papers indexed in our repository and generate a structured JSON comparison matrix evaluating ALL of them.
+    prompt = f"""Analyze these {paper_count} research papers indexed in our repository and generate a structured JSON comparison matrix evaluating ALL of them.
 
 INDEXED PAPERS:
 {papers_json}
@@ -31,8 +27,31 @@ Return a valid JSON object with a "matrix" array containing objects for EACH pap
 - "indexingCost": Indexing token or compute cost (e.g. Low, Moderate, High)
 - "queryLatency": Expected query response latency (e.g. "< 10ms", "~1.5s")
 
-RETURN ONLY VALID JSON:"""
+RETURN ONLY VALID JSON (no markdown fence):"""
 
-    prompt = PromptTemplate.from_template(template)
-    chain = prompt | llm | JsonOutputParser()
-    return chain
+    raw_response = await generate_nemotron_response(
+        prompt=prompt,
+        system_prompt=system_prompt,
+        temperature=0.1,
+        max_tokens=2500
+    )
+
+    try:
+        # Strip potential markdown backticks
+        clean_json = raw_response.strip()
+        if clean_json.startswith("```"):
+            clean_json = clean_json.split("\n", 1)[1]
+            if clean_json.endswith("```"):
+                clean_json = clean_json.rsplit("```", 1)[0]
+            if clean_json.startswith("json"):
+                clean_json = clean_json[4:]
+
+        parsed = json.loads(clean_json.strip())
+        if isinstance(parsed, dict) and "matrix" in parsed:
+            return parsed["matrix"]
+        if isinstance(parsed, list):
+            return parsed
+    except Exception as e:
+        print(f"Comparison matrix JSON parse notice: {e}")
+
+    return []

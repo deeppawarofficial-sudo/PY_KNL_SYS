@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from routers import arxiv, rag, papers, knowledge
-from services.vector_store import add_paper_to_store
+from services.vector_store import add_paper_to_store, get_store_stats
 
 app = FastAPI(
-    title="ArXiv & RAG Multi-Paper Research Platform (FastAPI + LangChain)",
-    description="Python FastAPI backend powering multi-paper vector search, LangChain LCEL synthesis, literature review generation, and ArXiv live paper import.",
-    version="2.0.0"
+    title="ArXiv & RAG Multi-Paper Research Platform (Nemotron + BAAI/bge-large-en-v1.5)",
+    description="Python FastAPI backend powering multi-paper vector search via BAAI/bge-large-en-v1.5 embeddings, Nvidia Nemotron LLM synthesis, literature review generation, and ArXiv live paper import.",
+    version="2.5.0"
 )
 
 # CORS Middleware setup
@@ -70,12 +70,14 @@ SAMPLE_PAPERS = [
 @app.on_event("startup")
 async def startup_event():
     print("="*65)
-    print("🚀 FastAPI + LangChain Research Platform Backend Starting...")
-    print("📚 Pre-seeding initial papers into LangChain vector store...")
+    print("🚀 FastAPI Research Platform Backend Starting...")
+    print("🤖 LLM Engine: Nvidia Nemotron (nvidia/Llama-3.1-Nemotron-70B-Instruct-HF)")
+    print("📐 Embedder: BAAI/bge-large-en-v1.5 (Hugging Face Hub)")
+    print("📚 Pre-seeding initial papers into BAAI/bge-large-en-v1.5 vector store...")
     for paper in SAMPLE_PAPERS:
         chunks = add_paper_to_store(paper)
         print(f"   Indexed: '{paper['title'][:45]}...' ({chunks} chunks)")
-    print("✅ FastApi + LangChain Backend Ready on http://localhost:8000")
+    print("✅ FastApi + Nemotron Backend Ready on http://localhost:8000")
     print("="*65)
 
 @app.get("/")
@@ -84,8 +86,9 @@ async def health_check():
     return {
         "status": "online",
         "framework": "FastAPI",
-        "aiEngine": "LangChain + Gemini",
-        "message": "FastAPI Python backend is operational."
+        "aiEngine": "Nvidia Nemotron LLM",
+        "embeddings": "BAAI/bge-large-en-v1.5",
+        "message": "FastAPI Nemotron + BAAI/bge-large-en-v1.5 Python backend is operational."
     }
 
 if __name__ == "__main__":

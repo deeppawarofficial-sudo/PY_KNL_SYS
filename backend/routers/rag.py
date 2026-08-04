@@ -3,11 +3,11 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
 from services.vector_store import search_vector_store, get_all_papers
-from chains.rag_synthesis import get_rag_synthesis_chain
-from chains.literature_review import get_literature_review_chain
-from chains.comparison_matrix import get_comparison_matrix_chain
+from chains.rag_synthesis import run_rag_synthesis
+from chains.literature_review import run_literature_review
+from chains.comparison_matrix import run_comparison_matrix
 
-router = APIRouter(prefix="/api/rag", tags=["RAG & LangChain"])
+router = APIRouter(prefix="/api/rag", tags=["RAG & Nemotron"])
 
 class RagSearchRequest(BaseModel):
     query: str
@@ -61,9 +61,8 @@ async def rag_synthesize(req: RagSynthesizeRequest):
 
         context_str = "\n\n".join(context_lines)
 
-        # Execute LangChain synthesis chain
-        chain = get_rag_synthesis_chain()
-        answer = await chain.ainvoke({"query": req.query, "context": context_str})
+        # Execute Nemotron synthesis chain
+        answer = await run_rag_synthesis(query=req.query, context_str=context_str)
 
         elapsed_ms = int((time.time() - start_time) * 1000)
 
@@ -76,7 +75,7 @@ async def rag_synthesize(req: RagSynthesizeRequest):
             "executionTimeMs": elapsed_ms
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"LangChain Synthesis Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Nemotron Synthesis Error: {str(e)}")
 
 @router.post("/generate-review")
 async def generate_literature_review(req: LitReviewRequest):
@@ -103,28 +102,27 @@ async def generate_literature_review(req: LitReviewRequest):
             })
             context_lines.append(f"[{cite_id}] Paper: \"{c['paperTitle']}\" ({c['year']})\nSection: {c['sectionName']}\nExcerpt: {c['content']}")
 
-        catalog_str = "\n\n".join([f"PAPER [P{idx+1}]: \"{p['title']}\" ({p['year']}) by {', '.join(p['authors'])}\nAbstract: {p['abstract']}" for idx, p in enumerate(all_papers)])
+        catalog_str = "\n\n".join([f"PAPER [P{idx+1}]: \"{p['title']}\" ({p['year']}) by {', '.join(p.get('authors', []))}\nAbstract: {p['abstract']}" for idx, p in enumerate(all_papers)])
         context_str = "\n\n".join(context_lines)
 
-        # Execute LangChain Literature Review chain
-        chain = get_literature_review_chain()
-        review_text = await chain.ainvoke({
-            "paper_count": len(all_papers),
-            "catalog": catalog_str,
-            "context": context_str
-        })
+        # Execute Nemotron Literature Review chain
+        review_text = await run_literature_review(
+            paper_count=len(all_papers),
+            catalog_str=catalog_str,
+            context_str=context_str
+        )
 
         return {
             "title": f"State-of-the-Art Multi-Paper Literature Review ({len(all_papers)} Indexed Papers)",
             "topicCategory": f"All {len(all_papers)} Indexed Papers",
             "content": review_text,
-            "executiveSummary": f"Unified literature review synthesized using LangChain across all {len(all_papers)} papers in the vector repository.",
+            "executiveSummary": f"Unified literature review synthesized using Nemotron LLM & BAAI/bge-large-en-v1.5 embeddings across all {len(all_papers)} papers.",
             "citations": citations,
             "papersCount": len(all_papers),
             "createdDate": time.strftime("%Y-%m-%dT%H:%M:%SZ")
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"LangChain Literature Review Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Nemotron Literature Review Error: {str(e)}")
 
 @router.get("/matrix")
 async def get_comparison_matrix():
@@ -134,28 +132,24 @@ async def get_comparison_matrix():
             return {"matrix": [], "papersCount": 0}
 
         try:
-            chain = get_comparison_matrix_chain()
-            papers_json = [{"id": p["id"], "title": p["title"], "authors": ", ".join(p["authors"]), "year": p["year"], "topicCategory": p.get("topicCategory"), "abstract": p["abstract"]} for p in all_papers]
-            result = await chain.ainvoke({
-                "paper_count": len(all_papers),
-                "papers_json": str(papers_json)
-            })
-            if "matrix" in result and isinstance(result["matrix"], list):
-                return {"matrix": result["matrix"], "papersCount": len(all_papers)}
+            papers_json_str = str([{"id": p["id"], "title": p["title"], "authors": ", ".join(p.get("authors", [])), "year": p["year"], "topicCategory": p.get("topicCategory"), "abstract": p["abstract"]} for p in all_papers])
+            matrix_data = await run_comparison_matrix(paper_count=len(all_papers), papers_json=papers_json_str)
+            if matrix_data and isinstance(matrix_data, list) and len(matrix_data) > 0:
+                return {"matrix": matrix_data, "papersCount": len(all_papers)}
         except Exception as e:
-            print(f"Matrix LLM fallback: {e}")
+            print(f"Matrix LLM fallback notice: {e}")
 
-        # Fallback matrix
+        # Fallback matrix if offline
         fallback = [{
             "paradigm": p.get("topicCategory", "Indexed Research"),
             "paper": f"{p['title']} ({p['year']})",
             "architecture": p["abstract"][:140] + "...",
-            "retrievalType": "Vector Cosine & LangChain Text Splitter",
+            "retrievalType": "BAAI/bge-large-en-v1.5 Dense Vector Cosine Search",
             "bestUseCase": f"Domain research in {p.get('topicCategory')}",
-            "keyAdvantage": f"Indexed with {p.get('chunkCount', 5)} vector chunks",
+            "keyAdvantage": f"Indexed with {p.get('chunkCount', 5)} BAAI/bge-large-en-v1.5 chunks",
             "mainLimitation": "Domain specific scope",
             "indexingCost": "Low",
-            "queryLatency": "Fast (< 50ms)"
+            "queryLatency": "< 50ms"
         } for p in all_papers]
 
         return {"matrix": fallback, "papersCount": len(all_papers)}

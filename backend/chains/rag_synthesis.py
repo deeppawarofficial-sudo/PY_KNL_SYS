@@ -1,37 +1,34 @@
 import os
-from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_google_genai import ChatGoogleGenerativeAI
+from services.nemotron_llm import generate_nemotron_response
 
-def get_rag_synthesis_chain():
+async def run_rag_synthesis(query: str, context_str: str) -> str:
     """
-    Constructs a LangChain LCEL (LangChain Expression Language) Runnable Sequence
-    using ChatGoogleGenerativeAI and PromptTemplate for multi-paper RAG synthesis.
+    Executes multi-paper RAG synthesis using Nvidia Nemotron LLM.
     """
-    api_key = os.getenv("GEMINI_API_KEY", "")
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=api_key if api_key else None,
-        temperature=0.2,
+    system_prompt = (
+        "You are an elite AI Research Assistant and Literature Synthesizer powered by Nvidia Nemotron LLM. "
+        "Synthesize an authoritative research response for the user query based on the retrieved vector evidence. "
+        "Include verifiable inline citations [C1], [C2], etc. matching the context excerpts."
     )
 
-    template = """You are an elite AI Research Assistant and Literature Synthesizer powered by LangChain.
-Synthesize a comprehensive, publication-ready research response for the query based on the retrieved vector excerpts from academic papers.
-
-USER QUERY:
+    prompt = f"""USER RESEARCH QUERY:
 {query}
 
-RETRIEVED VECTOR EVIDENCE:
-{context}
+RETRIEVED MULTI-PAPER VECTOR EXCERPTS:
+{context_str}
 
 REQUIREMENTS:
-1. Provide a direct, authoritative, and well-structured response synthesizing evidence across papers.
-2. Use inline citations [C1], [C2], etc. matching the provided context excerpts.
-3. Highlight core methodological tradeoffs, benchmark results, and consensus findings.
-4. Format output in clean Markdown.
+1. Provide a direct, structured response synthesizing findings across papers.
+2. Use inline citations [C1], [C2], etc. to credit source context lines.
+3. Highlight architectural tradeoffs, benchmark results, and limitations.
+4. Format in clean, readable Markdown.
 
 SYNTHESIZED RESPONSE:"""
 
-    prompt = PromptTemplate.from_template(template)
-    chain = prompt | llm | StrOutputParser()
-    return chain
+    response = await generate_nemotron_response(
+        prompt=prompt,
+        system_prompt=system_prompt,
+        temperature=0.2,
+        max_tokens=2000
+    )
+    return response

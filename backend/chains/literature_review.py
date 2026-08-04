@@ -1,42 +1,40 @@
 import os
-from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_google_genai import ChatGoogleGenerativeAI
+from services.nemotron_llm import generate_nemotron_response
 
-def get_literature_review_chain():
+async def run_literature_review(paper_count: int, catalog_str: str, context_str: str) -> str:
     """
-    Constructs a LangChain LCEL chain for generating a comprehensive single-document
-    Literature Review across all indexed research papers.
+    Synthesizes a comprehensive Literature Review across all indexed papers using Nvidia Nemotron LLM.
     """
-    api_key = os.getenv("GEMINI_API_KEY", "")
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=api_key if api_key else None,
-        temperature=0.25,
+    system_prompt = (
+        "You are an expert AI Research Synthesizer utilizing Nvidia Nemotron LLM. "
+        "Generate a unified, single-document Literature Review report analyzing ALL indexed papers."
     )
 
-    template = """You are an expert AI Research Synthesizer utilizing LangChain chains.
-Generate a unified, single-document Literature Review report synthesizing ALL {paper_count} research papers currently indexed in our repository catalog.
+    prompt = f"""Generate a comprehensive scientific Literature Review covering ALL {paper_count} research papers currently indexed in our repository.
 
 INDEXED PAPERS CATALOG ({paper_count} PAPERS):
-{catalog}
+{catalog_str}
 
 RETRIEVED MULTI-PAPER VECTOR EXCERPTS:
-{context}
+{context_str}
 
 CRITICAL REQUIREMENTS:
-1. Cover ALL {paper_count} indexed papers in this single literature review synthesis! Do not omit any paper.
+1. Cover ALL {paper_count} indexed papers in this single literature review synthesis!
 2. Structure the review with clear Markdown headings:
    # Comprehensive Scientific Literature Review ({paper_count} Papers)
-   ## 1. Executive Summary & Scope of the Repository
+   ## 1. Executive Summary & Repository Scope
    ## 2. Paradigm Evolution & Methodological Taxonomies
    ## 3. Side-by-Side Comparative Analysis & Strategic Trade-Offs
-   ## 4. Key Findings, Benchmarks & Paradigm Shifts Across All Papers
+   ## 4. Key Findings, Benchmarks & Paradigm Shifts
    ## 5. Open Challenges, Limitations & Future Research Directions
-3. Use inline citations [C1], [C2] to support claims.
+3. Use inline citations [C1], [C2] where applicable.
 
 LITERATURE REVIEW:"""
 
-    prompt = PromptTemplate.from_template(template)
-    chain = prompt | llm | StrOutputParser()
-    return chain
+    response = await generate_nemotron_response(
+        prompt=prompt,
+        system_prompt=system_prompt,
+        temperature=0.25,
+        max_tokens=3000
+    )
+    return response
