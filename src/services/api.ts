@@ -3,33 +3,47 @@ import { Paper, PaperChunk, SearchResultChunk, SynthesisResult, KnowledgeGraphDa
 const BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || '';
 
 function apiUrl(path: string): string {
-  if (path.startsWith('/')) {
-    return `${BASE_URL}${path}`;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  if (!BASE_URL) return cleanPath;
+  return `${BASE_URL}${cleanPath}`;
+}
+
+async function safeFetch(path: string, options?: RequestInit): Promise<Response> {
+  const primaryUrl = apiUrl(path);
+  try {
+    const res = await fetch(primaryUrl, options);
+    return res;
+  } catch (err: any) {
+    if (BASE_URL && (err.name === 'TypeError' || err.message?.includes('fetch'))) {
+      const fallbackUrl = path.startsWith('/') ? path : `/${path}`;
+      console.warn(`Fetch to ${primaryUrl} failed. Falling back to relative endpoint: ${fallbackUrl}`);
+      return await fetch(fallbackUrl, options);
+    }
+    throw err;
   }
-  return `${BASE_URL}/${path}`;
 }
 
 export async function fetchStats() {
-  const res = await fetch(apiUrl('/api/stats'));
+  const res = await safeFetch('/api/stats');
   if (!res.ok) throw new Error('Failed to fetch index stats');
   return res.json();
 }
 
 export async function fetchPapers(category?: string): Promise<Paper[]> {
-  const url = category && category !== 'All' ? apiUrl(`/api/papers?category=${encodeURIComponent(category)}`) : apiUrl('/api/papers');
-  const res = await fetch(url);
+  const path = category && category !== 'All' ? `/api/papers?category=${encodeURIComponent(category)}` : '/api/papers';
+  const res = await safeFetch(path);
   if (!res.ok) throw new Error('Failed to fetch papers list');
   return res.json();
 }
 
 export async function fetchPaperDetails(paperId: string): Promise<{ paper: Paper; chunks: PaperChunk[] }> {
-  const res = await fetch(apiUrl(`/api/papers/${encodeURIComponent(paperId)}`));
+  const res = await safeFetch(`/api/papers/${encodeURIComponent(paperId)}`);
   if (!res.ok) throw new Error('Failed to fetch paper details');
   return res.json();
 }
 
 export async function deletePaper(paperId: string): Promise<{ message: string; paperId: string }> {
-  const res = await fetch(apiUrl(`/api/papers/${encodeURIComponent(paperId)}`), {
+  const res = await safeFetch(`/api/papers/${encodeURIComponent(paperId)}`, {
     method: 'DELETE',
   });
   if (!res.ok) {
@@ -40,7 +54,7 @@ export async function deletePaper(paperId: string): Promise<{ message: string; p
 }
 
 export async function resetResearchSession(mode: 'empty' | 'preset' = 'preset'): Promise<{ message: string }> {
-  const res = await fetch(apiUrl('/api/papers/reset-session'), {
+  const res = await safeFetch('/api/papers/reset-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ mode }),
@@ -53,7 +67,7 @@ export async function resetResearchSession(mode: 'empty' | 'preset' = 'preset'):
 }
 
 export async function searchArXiv(query: string, maxResults: number = 25) {
-  const res = await fetch(apiUrl('/api/arxiv/search'), {
+  const res = await safeFetch('/api/arxiv/search', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, maxResults }),
@@ -74,7 +88,7 @@ export async function importArXivPaper(paperData: {
   pdfUrl?: string;
   topicCategory?: string;
 }) {
-  const res = await fetch(apiUrl('/api/arxiv/import'), {
+  const res = await safeFetch('/api/arxiv/import', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(paperData),
@@ -93,7 +107,7 @@ export async function uploadCustomPaper(paperData: {
   text?: string;
   fileBase64?: string;
 }) {
-  const res = await fetch(apiUrl('/api/upload-paper'), {
+  const res = await safeFetch('/api/upload-paper', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(paperData),
@@ -112,7 +126,7 @@ export async function searchVectorChunks(params: {
   minSimilarity?: number;
   enableHybrid?: boolean;
 }): Promise<{ query: string; retrievedChunks: SearchResultChunk[] }> {
-  const res = await fetch(apiUrl('/api/rag/search'), {
+  const res = await safeFetch('/api/rag/search', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
@@ -128,7 +142,7 @@ export async function synthesizeResearch(params: {
   minSimilarity?: number;
   enableHybrid?: boolean;
 }): Promise<SynthesisResult> {
-  const res = await fetch(apiUrl('/api/rag/synthesize'), {
+  const res = await safeFetch('/api/rag/synthesize', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
@@ -141,7 +155,7 @@ export async function synthesizeResearch(params: {
 }
 
 export async function generateLiteratureReview(topicCategory?: string): Promise<LiteratureReview> {
-  const res = await fetch(apiUrl('/api/rag/generate-review'), {
+  const res = await safeFetch('/api/rag/generate-review', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ topicCategory: topicCategory || 'All' }),
@@ -154,7 +168,7 @@ export async function generateLiteratureReview(topicCategory?: string): Promise<
 }
 
 export async function fetchComparisonMatrix(): Promise<{ matrix: any[]; papersCount: number }> {
-  const res = await fetch(apiUrl('/api/rag/matrix'));
+  const res = await safeFetch('/api/rag/matrix');
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || 'Failed to fetch comparison matrix');
@@ -163,7 +177,7 @@ export async function fetchComparisonMatrix(): Promise<{ matrix: any[]; papersCo
 }
 
 export async function fetchKnowledgeGraph(): Promise<KnowledgeGraphData> {
-  const res = await fetch(apiUrl('/api/knowledge-graph'));
+  const res = await safeFetch('/api/knowledge-graph');
   if (!res.ok) throw new Error('Failed to fetch knowledge graph data');
   return res.json();
 }
@@ -178,7 +192,7 @@ export async function sendChatMessage(params: {
   paperId?: string;
   paperTitle?: string;
 }> {
-  const res = await fetch(apiUrl('/api/chat'), {
+  const res = await safeFetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),

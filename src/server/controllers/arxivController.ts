@@ -37,7 +37,7 @@ export async function searchArxiv(req: Request, res: Response) {
       }
 
       const rawId = idMatch ? idMatch[1].trim() : '';
-      const arxivId = rawId.replace('http://arxiv.org/abs/', '').replace(/v\d+$/, '');
+      const arxivId = rawId.replace(/^https?:\/\/arxiv\.org\/abs\//, '').replace(/v\d+$/, '');
       const title = titleMatch ? titleMatch[1].replace(/\n/g, ' ').trim() : 'Untitled Paper';
       const abstract = summaryMatch ? summaryMatch[1].replace(/\n/g, ' ').trim() : '';
       const publishedDate = publishedMatch ? publishedMatch[1].substring(0, 10) : new Date().toISOString().substring(0, 10);

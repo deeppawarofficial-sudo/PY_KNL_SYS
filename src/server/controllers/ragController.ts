@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { searchVectorStore } from '../models/vectorStoreModel.js';
 import { chunksDatabase, getAllPapers } from '../models/paperModel.js';
-import { getGeminiClient } from '../services/geminiService.js';
+import { callNemotronLlm } from '../services/nemotronService.js';
 import { Citation, SynthesisResult, ComparisonMatrix } from '../../types.js';
 
 export function searchRag(req: Request, res: Response) {
@@ -63,15 +63,14 @@ ${c.snippet}
       )
       .join('\n----------------------------------------\n');
 
-    const systemInstruction = `You are the AI Knowledge Synthesizer, an expert multi-paper research assistant.
+    const systemInstruction = `You are the AI Knowledge Synthesizer, an expert multi-paper research assistant powered by Nvidia Nemotron LLM.
 Your goal is to answer research questions by synthesizing information across multiple scientific papers.
 
 CRITICAL CITATION RULES:
 1. You MUST synthesize information from multiple papers into a cohesive, rigorous answer.
 2. Every major claim, methodology comparison, empirical result, or limitation MUST include inline citations using the exact citation tags provided in the context, e.g., [C1], [C2], [C3].
 3. Never invent facts or citations outside the provided sources.
-4. Structure your synthesis with markdown headers, concise comparisons, bullet points, and a explicit breakdown of consensus points vs conflicting opinions or limitations across papers.
-5. If the query asks for a comparison matrix (e.g. comparing methodologies), provide clear side-by-side trade-offs.`;
+4. Structure your synthesis with markdown headers, concise comparisons, bullet points, and an explicit breakdown of consensus points vs conflicting opinions or limitations across papers.`;
 
     const userPrompt = `USER RESEARCH QUESTION:
 "${query}"
@@ -87,19 +86,13 @@ Include:
 4. Conflicting Opinions or Identified Limitations
 5. Structured Key Takeaways for Researchers`;
 
-    const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
-      contents: userPrompt,
-      config: {
-        systemInstruction,
-        temperature: 0.3,
-      },
+    const synthesizedAnswer = await callNemotronLlm({
+      systemInstruction,
+      prompt: userPrompt,
+      temperature: 0.3,
     });
 
-    const synthesizedAnswer = response.text || 'Failed to generate synthesized response.';
     const executionTimeMs = Date.now() - startTime;
-
     const paperIdsUsed = Array.from(new Set(citations.map((c) => c.paperId)));
 
     let comparisonMatrix: ComparisonMatrix | undefined = undefined;
@@ -227,26 +220,14 @@ ${contextStr}
 
 CRITICAL REQUIREMENTS:
 1. Cover ALL ${allPapers.length} indexed papers in this single literature review synthesis! Do not omit any paper.
-2. Structure the review into clear, formal sections with Markdown headings:
-   # Comprehensive Scientific Literature Review (${allPapers.length} Papers)
-   ## 1. Executive Summary & Scope of the Repository
-   ## 2. Paradigm Evolution & Methodological Taxonomies
-   ## 3. Side-by-Side Comparative Analysis & Strategic Trade-Offs
-   ## 4. Key Findings, Benchmarks & Paradigm Shifts Across All Papers
-   ## 5. Open Challenges, Limitations & Future Research Directions
-3. Use inline citations e.g. [C1], [C2] or explicit paper titles where relevant to support claims.
-4. Provide a thorough, authoritative academic summary written in Markdown.`;
+2. Structure the review into clear, formal sections with Markdown headings.
+3. Use inline citations e.g. [C1], [C2] or explicit paper titles where relevant.`;
 
-    const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
-      contents: prompt,
-      config: {
-        temperature: 0.25,
-      },
+    const fullReviewText = await callNemotronLlm({
+      systemInstruction: 'You are an expert AI Research Assistant & Literature Review Synthesizer powered by Nvidia Nemotron LLM.',
+      prompt,
+      temperature: 0.25,
     });
-
-    const fullReviewText = response.text || 'Failed to generate literature review synthesis.';
 
     res.json({
       title: `State-of-the-Art Multi-Paper Literature Review (${allPapers.length} Indexed Papers)`,
@@ -272,7 +253,6 @@ export async function getComparisonMatrix(req: Request, res: Response) {
     }
 
     try {
-      const ai = getGeminiClient();
       const papersInfo = allPapers.map((p) => ({
         id: p.id,
         title: p.title,
@@ -300,21 +280,18 @@ Return a valid JSON object with a "matrix" key containing an array of objects fo
 
 Return ONLY the valid JSON object.`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.6-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json',
-          temperature: 0.2,
-        },
+      const responseText = await callNemotronLlm({
+        systemInstruction: 'You are a JSON matrix generator.',
+        prompt,
+        temperature: 0.2,
       });
 
-      const parsed = JSON.parse(response.text || '{}');
+      const parsed = JSON.parse(responseText.match(/\{[\s\S]*\}/)?.[0] || responseText);
       if (parsed.matrix && Array.isArray(parsed.matrix)) {
         return res.json({ matrix: parsed.matrix, papersCount: allPapers.length });
       }
     } catch (aiErr) {
-      console.warn('Gemini matrix generation fallback:', aiErr);
+      console.warn('Nemotron matrix generation fallback:', aiErr);
     }
 
     const fallbackMatrix = allPapers.map((paper) => ({
@@ -335,4 +312,3 @@ Return ONLY the valid JSON object.`;
     res.status(500).json({ error: 'Failed to generate comparison matrix: ' + err.message });
   }
 }
-

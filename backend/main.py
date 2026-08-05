@@ -1,4 +1,8 @@
 import os
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+os.environ["USE_TF"] = "0"
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -10,9 +14,9 @@ from routers import arxiv, rag, papers, knowledge
 from services.vector_store import add_paper_to_store, get_store_stats
 
 app = FastAPI(
-    title="ArXiv & RAG Multi-Paper Research Platform (Nemotron + BAAI/bge-large-en-v1.5)",
-    description="Python FastAPI backend powering multi-paper vector search via BAAI/bge-large-en-v1.5 embeddings, Nvidia Nemotron LLM synthesis, literature review generation, and ArXiv live paper import.",
-    version="2.5.0"
+    title="ArXiv & Qdrant RAG Multi-Paper Platform (Nemotron + Qdrant + BAAI/bge-large-en-v1.5)",
+    description="Python FastAPI backend powering multi-paper vector search via Qdrant Vector Database, BAAI/bge-large-en-v1.5 embeddings, Nvidia Nemotron LLM synthesis, literature review generation, and ArXiv live paper import.",
+    version="2.6.0"
 )
 
 # CORS Middleware setup

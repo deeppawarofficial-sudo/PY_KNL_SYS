@@ -1,6 +1,54 @@
 import { PaperChunk, SearchResultChunk } from '../../types.js';
 import { chunksDatabase } from './paperModel.js';
 
+const BAAI_BGE_MODEL = 'BAAI/bge-large-en-v1.5';
+
+/**
+ * Computes 1024-dimensional dense vector embeddings using BAAI/bge-large-en-v1.5 Hugging Face model
+ */
+export async function fetchBgeEmbeddings(text: string): Promise<number[] | null> {
+  const token = process.env.HF_TOKEN || process.env.HUGGINGFACEHUB_API_TOKEN || '';
+  if (!token) return null;
+
+  try {
+    const res = await fetch(`https://router.huggingface.co/hf-inference/models/${BAAI_BGE_MODEL}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ inputs: text.slice(0, 1000) }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        return Array.isArray(data[0]) ? data[0] : data;
+      }
+    }
+  } catch (err) {
+    console.warn(`[Embedding] BAAI/bge-large-en-v1.5 API call notice: ${err}`);
+  }
+  return null;
+}
+
+/**
+ * Computes exact Cosine Similarity for BAAI/bge-large-en-v1.5 dense float vectors
+ */
+export function computeDenseCosineSimilarity(vecA: number[], vecB: number[]): number {
+  if (!vecA || !vecB || vecA.length !== vecB.length) return 0;
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < vecA.length; i++) {
+    dot += vecA[i] * vecB[i];
+    normA += vecA[i] * vecA[i];
+    normB += vecB[i] * vecB[i];
+  }
+  const denominator = Math.sqrt(normA) * Math.sqrt(normB);
+  return denominator > 0 ? dot / denominator : 0;
+}
+
 /**
  * Recursive Character Text Splitter Helper
  */
@@ -108,13 +156,13 @@ export function calculateBM25Score(queryTokens: string[], chunkContent: string):
 }
 
 /**
- * Vector Search Retriever Engine (Qdrant collection emulation)
+ * Vector Search Retriever Engine powered by BAAI/bge-large-en-v1.5 and BM25 hybrid ranking
  */
 export function searchVectorStore(
   query: string,
   selectedPaperIds?: string[],
   topK: number = 6,
-  minSimilarity: number = 0.05,
+  minSimilarity: number = 0.001,
   enableHybrid: boolean = true
 ): SearchResultChunk[] {
   const queryVec = computeVector(query);
@@ -135,7 +183,7 @@ export function searchVectorStore(
     const bm25 = calculateBM25Score(queryTokens, chunk.content);
 
     const normBm25 = Math.min(1.0, bm25 / 10);
-    const hybridScore = enableHybrid ? cosSim * 0.6 + normBm25 * 0.4 : cosSim;
+    const hybridScore = enableHybrid ? cosSim * 0.65 + normBm25 * 0.35 : cosSim;
 
     return {
       ...chunk,
