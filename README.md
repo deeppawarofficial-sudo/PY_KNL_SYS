@@ -39,17 +39,17 @@ The platform enables researchers and developers to query across multiple indexed
 
 ```mermaid
 flowchart TD
-    A[Input & Ingestion Layer] -->|ArXiv API / PDF Upload| B[Text Parsing & Recursive Chunking]
-    B -->|700-char chunks + 100 overlap| C[Vector Embedding & Storage]
-    C -->|BAAI/bge-large-en-v1.5 1024-dim| D[Qdrant HNSW Vector DB]
+    A["Input & Ingestion Layer"] -->|"ArXiv API / PDF Upload"| B["Text Parsing & Recursive Chunking"]
+    B -->|"700-char chunks + 100 overlap"| C["Vector Embedding & Storage"]
+    C -->|"BAAI/bge-large-en-v1.5 1024-dim"| D["Qdrant HNSW Vector DB"]
     
-    E[User Research Query] -->|Synthesizer / Chat / Review / Matrix| F[Hybrid Sparse-Dense Retriever]
-    D -->|Cosine Similarity + BM25 RRF| F
+    E["User Research Query"] -->|"Synthesizer / Chat / Review / Matrix"| F["Hybrid Sparse-Dense Retriever"]
+    D -->|"Cosine Similarity + BM25 RRF"| F
     
-    F -->|Top-K Chunks + [C1], [C2] Citation Tags| G[Prompt Engineering & Reasoning Chains]
-    G -->|Grounded Context Prompt| H[LLM Inference: Nemotron 70B / Qwen 2.5 3B]
+    F -->|"Top-K Chunks + Citations C1, C2"| G["Prompt Engineering & Reasoning Chains"]
+    G -->|"Grounded Context Prompt"| H["LLM Inference: Nemotron 70B / Qwen 2.5 3B"]
     
-    H -->|Markdown + Citation Evidence + JSON Matrix| I[React 19 Frontend UI Output]
+    H -->|"Markdown + Citation Evidence + JSON Matrix"| I["React 19 Frontend UI Output"]
 ```
 
 ### Pipeline Step Breakdown:
