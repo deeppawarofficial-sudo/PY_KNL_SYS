@@ -204,7 +204,7 @@ QDRANT_API_KEY=
 
 For offline execution without Hugging Face API rate limits, the platform supports local model execution via **Ollama**.
 
-### System Hardware Benchmarks (AMD Ryzen 5 3500U / 12 GB RAM):
+### System Hardware Benchmarks : 
 
 | Model Name | Model Size | RAM Footprint | Token Generation Speed | Recommended Status |
 | :--- | :--- | :--- | :--- | :--- |
