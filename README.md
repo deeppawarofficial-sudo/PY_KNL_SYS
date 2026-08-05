@@ -6,6 +6,19 @@ The platform allows researchers and developers to query across multiple indexed 
 
 ---
 
+## 🖼️ Application Showcase & Prototype Screenshots
+
+### 1. Multi-Paper RAG Synthesis Workspace
+![Synthesizer Workspace](assets/synthesizer_workspace.png)
+
+### 2. Nvidia Nemotron AI Research Chatbot
+![Research Chatbot](assets/research_chatbot.png)
+
+### 3. Dynamic Knowledge Graph Network
+![Knowledge Graph Network](assets/knowledge_graph.png)
+
+---
+
 ## 🏛️ Architecture & Project Structure
 
 The project uses a decoupled architecture with a **Python FastAPI + Hugging Face (Nemotron + BAAI/bge-large-en-v1.5)** backend engine and a modern **React 19 + TypeScript** frontend:
