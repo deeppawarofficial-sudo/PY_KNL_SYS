@@ -6,7 +6,10 @@ The platform allows researchers and developers to query across multiple indexed 
 
 ---
 
-## 🖼️ Application Showcase & Prototype Screenshots
+## 🖼️ Application Showcase & Architecture Diagram
+
+### System Data Flow Architecture
+![System Data Flow Architecture](assets/project_architecture_flow.png)
 
 ### 1. Multi-Paper RAG Synthesis Workspace
 ![Synthesizer Workspace](assets/synthesizer_workspace.png)
