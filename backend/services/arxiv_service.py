@@ -49,3 +49,51 @@ async def search_arxiv_papers(query: str, max_results: int = 25) -> List[Dict[st
             })
 
         return results
+
+async def search_semantic_scholar_papers(query: str, max_results: int = 25) -> List[Dict[str, Any]]:
+    """
+    Queries Semantic Scholar Graph API for academic papers.
+    Uses AI neural search across CS/AI research corpora with graceful fallbacks.
+    """
+    limit = min(max(max_results, 1), 50)
+    primary_url = f"https://api.semanticscholar.org/graph/v1/paper/search?query={query}&limit={limit}&fields=title,authors,abstract,year,externalIds,openAccessPdf"
+    fallback_url = f"https://api.semanticscholar.org/graph/v1/paper/search?query={query}&limit={limit}&fields=title,authors,abstract,year"
+
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        resp = await client.get(primary_url, headers={"User-Agent": "AI-Knowledge-Synthesizer/1.0"})
+        if resp.status_code == 429 or resp.status_code != 200:
+            resp = await client.get(fallback_url, headers={"User-Agent": "AI-Knowledge-Synthesizer/1.0"})
+
+        if resp.status_code == 200:
+            data = resp.json()
+            papers = data.get("data", [])
+            results = []
+
+            for p in papers:
+                arxiv_id = (p.get("externalIds", {}) or {}).get("ArXiv", "")
+                authors = [a.get("name", "Unknown") for a in p.get("authors", [])]
+                pdf_info = p.get("openAccessPdf", {}) or {}
+                pdf_url = pdf_info.get("url", "") or (f"https://arxiv.org/pdf/{arxiv_id}.pdf" if arxiv_id else "")
+
+                results.append({
+                    "id": f"ss_{p.get('paperId')}",
+                    "paperId": p.get("paperId"),
+                    "title": p.get("title", "Untitled Paper"),
+                    "authors": authors if authors else ["Unknown Authors"],
+                    "year": p.get("year") or 2024,
+                    "abstract": p.get("abstract", "No abstract available for this paper."),
+                    "publishedDate": p.get("publicationDate", str(p.get("year", 2024))),
+                    "arxivId": arxiv_id,
+                    "pdfUrl": pdf_url,
+                    "citationCount": p.get("citationCount", 0),
+                    "topicCategory": "Semantic Scholar AI Research",
+                    "source": "semantic_scholar"
+                })
+
+            if results:
+                return results
+
+    # Fallback to ArXiv search if Semantic Scholar is unavailable
+    return await search_arxiv_papers(query, max_results)
+
+

@@ -1,4 +1,10 @@
 import os
+import sys
+
+# Ensure UTF-8 encoding for Windows stdout
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 os.environ["TRANSFORMERS_NO_TF"] = "1"
 os.environ["USE_TF"] = "0"
@@ -18,6 +24,7 @@ app = FastAPI(
     description="Python FastAPI backend powering multi-paper vector search via Qdrant Vector Database, BAAI/bge-large-en-v1.5 embeddings, Nvidia Nemotron LLM synthesis, literature review generation, and ArXiv live paper import.",
     version="2.6.0"
 )
+
 
 # CORS Middleware setup
 app.add_middleware(
@@ -74,15 +81,16 @@ SAMPLE_PAPERS = [
 @app.on_event("startup")
 async def startup_event():
     print("="*65)
-    print("🚀 FastAPI Research Platform Backend Starting...")
-    print("🤖 LLM Engine: Nvidia Nemotron (nvidia/Llama-3.1-Nemotron-70B-Instruct-HF)")
-    print("📐 Embedder: BAAI/bge-large-en-v1.5 (Hugging Face Hub)")
-    print("📚 Pre-seeding initial papers into BAAI/bge-large-en-v1.5 vector store...")
+    print("[STARTUP] FastAPI Research Platform Backend Starting...")
+    print("[LLM Engine] Nvidia Nemotron (nvidia/Llama-3.1-Nemotron-70B-Instruct-HF)")
+    print("[Embedder] BAAI/bge-large-en-v1.5 (Hugging Face Hub)")
+    print("[Pre-seeding] Initial papers into vector store...")
     for paper in SAMPLE_PAPERS:
         chunks = add_paper_to_store(paper)
         print(f"   Indexed: '{paper['title'][:45]}...' ({chunks} chunks)")
-    print("✅ FastApi + Nemotron Backend Ready on http://localhost:8000")
+    print("[READY] FastApi + Nemotron Backend Ready on http://localhost:8000")
     print("="*65)
+
 
 @app.get("/")
 @app.get("/api/health")
