@@ -163,6 +163,8 @@ export async function callNemotronLlm(params: {
     }
     const groqModels = [DEFAULT_GROK_MODEL, 'llama-3.1-8b-instant', 'gemma2-9b-it'];
     for (const grokModel of groqModels) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
       try {
         console.log(`🚀 Calling Groq API with model: ${grokModel}`);
         const response = await fetch(GROQ_API_URL, {
@@ -177,7 +179,9 @@ export async function callNemotronLlm(params: {
             temperature: params.temperature ?? 0.2,
             max_tokens: params.maxTokens ?? 2048,
           }),
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
         if (response.ok) {
           const data = await response.json();
           if (data.choices?.[0]?.message?.content) {
@@ -189,10 +193,15 @@ export async function callNemotronLlm(params: {
           console.warn(`⚠️ Groq API error (${grokModel}) HTTP ${response.status}: ${errText.slice(0, 200)}`);
         }
       } catch (err: any) {
-        console.warn(`⚠️ Groq API fetch error (${grokModel}): ${err.message}`);
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          console.warn(`⚠️ Groq API timeout (${grokModel}) after 25s — trying next model...`);
+        } else {
+          console.warn(`⚠️ Groq API fetch error (${grokModel}): ${err.message}`);
+        }
       }
     }
-    return '### ⚠️ Groq API Unavailable\n\nAll Groq model attempts failed. Please check your API key and network connection.';
+    return '### ⚠️ Groq API Unavailable\n\nAll Groq model attempts failed or timed out (25s limit). Please check your `GROQ_API_KEY` and network connection.';
   }
 
   // Explicit Provider or Priority 1: Check Local Ollama / LM Studio endpoints

@@ -48,7 +48,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
   const [topK, setTopK] = useState(8);
   const [enableHybrid, setEnableHybrid] = useState(true);
   const [minSimilarity, setMinSimilarity] = useState(0.02);
-  const [modelProvider, setModelProvider] = useState<'auto' | 'nemotron' | 'grok' | 'grounded'>('auto');
+  const [modelProvider, setModelProvider] = useState<'nemotron' | 'grok' | 'grounded'>('grok');
 
   const [isLoading, setIsLoading] = useState(false);
   const [synthesisStep, setSynthesisStep] = useState<string>('');
