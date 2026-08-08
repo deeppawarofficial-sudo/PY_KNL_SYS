@@ -38,10 +38,10 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
             <button
               key={i}
               onClick={() => onCitationClick(citation)}
-              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 text-xs font-mono font-semibold text-cyan-300 bg-cyan-950/90 hover:bg-cyan-900 border border-cyan-700/80 rounded transition-all cursor-pointer shadow-sm hover:scale-105"
+              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 text-xs font-mono font-semibold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-700/80 rounded transition-all cursor-pointer shadow-sm hover:scale-105"
               title={`View Source: "${citation.paperTitle}" (${citation.year}) - ${citation.sectionName}`}
             >
-              <BookOpen className="w-3 h-3 text-cyan-400" />
+              <BookOpen className="w-3 h-3 text-amber-400" />
               <span>[{citeId}]</span>
             </button>
           );
@@ -57,7 +57,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 text-xs font-mono font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200 rounded">
+            <span className="px-2 py-0.5 text-xs font-mono font-semibold bg-amber-50 text-amber-700 border border-amber-200 rounded">
               Synthesized across {result.papersUsedCount} Papers
             </span>
             <span className="px-2 py-0.5 text-xs font-mono bg-slate-800 text-slate-300 rounded border border-slate-800 flex items-center gap-1">
@@ -73,7 +73,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
         <div className="flex items-center gap-2">
           <button
             onClick={() => exportSynthesisPDF(result)}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-700 border border-cyan-600 rounded-lg transition-colors cursor-pointer shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 border border-amber-600 rounded-lg transition-colors cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download PDF Report</span>
@@ -92,7 +92,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       {/* Main Synthesized Content */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xs space-y-6">
         <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-          <div className="w-7 h-7 rounded bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600 font-bold">
+          <div className="w-7 h-7 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
             <Sparkles className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Multi-Paper Knowledge Synthesis</h3>
@@ -110,7 +110,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       {result.comparisonMatrix && (
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-            <div className="w-7 h-7 rounded bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600 font-bold">
+            <div className="w-7 h-7 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
               <Layers className="w-4 h-4" />
             </div>
             <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Comparative Methodological Matrix</h3>
@@ -129,7 +129,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
               <tbody className="divide-y divide-slate-200 text-slate-200">
                 {result.comparisonMatrix.items.map((item, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
-                    <td className="p-3 font-semibold text-cyan-700">
+                    <td className="p-3 font-semibold text-amber-700">
                       <div>{item.paperTitle}</div>
                       <div className="text-[10px] text-slate-500 font-normal">({item.year}) - {item.authors[0]} et al.</div>
                     </td>
@@ -150,7 +150,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-cyan-600" />
+            <BookOpen className="w-4 h-4 text-amber-600" />
             <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Indexed Citations & Evidence ({result.citations.length})</h3>
           </div>
           <span className="text-xs text-slate-500 font-mono">Click citation to inspect chunk snippet</span>
@@ -161,16 +161,16 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
             <div
               key={cite.citationId}
               onClick={() => onCitationClick(cite)}
-              className="group bg-slate-800/50 hover:bg-cyan-50/60 border border-slate-800 hover:border-cyan-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
+              className="group bg-slate-800/50 hover:bg-amber-50/60 border border-slate-800 hover:border-amber-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
             >
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-cyan-700 bg-slate-900 border border-slate-800 rounded">
+                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-amber-700 bg-slate-900 border border-slate-800 rounded">
                     [{cite.citationId}]
                   </span>
                   <span className="text-[11px] text-slate-500 font-mono">Page {cite.pageNumber}</span>
                 </div>
-                <h4 className="text-xs font-semibold text-slate-100 group-hover:text-cyan-900 transition-colors line-clamp-1">
+                <h4 className="text-xs font-semibold text-slate-100 group-hover:text-amber-900 transition-colors line-clamp-1">
                   {cite.paperTitle}
                 </h4>
                 <p className="text-[11px] text-slate-500">

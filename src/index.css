@@ -1,10 +1,35 @@
 @import "tailwindcss";
 
-/* ── Scrollbar: dark thin style ── */
+/* ────────────────────────────────────────────────
+   AMBER + CHARCOAL THEME
+   Override Tailwind's slate palette with custom
+   warm charcoal values
+──────────────────────────────────────────────── */
+@theme {
+  /* Charcoal background scale */
+  --color-slate-950: #111318;
+  --color-slate-900: #1C1F26;
+  --color-slate-800: #252932;
+  --color-slate-700: #2E3340;
+  --color-slate-600: #3A3F4A;
+  --color-slate-500: #515763;
+  --color-slate-400: #717785;
+  --color-slate-300: #9CA3AF;
+  --color-slate-200: #D1D5DB;
+  --color-slate-100: #F3F4F6;
+  --color-slate-50:  #F9FAFB;
+
+  /* Keep amber as primary accent */
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+}
+
+/* ── Scrollbar: warm dark thin style ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-thumb { background: #2E3340; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #3A3F4A; }
 
 /* ── SpeedDial slide-in animation ── */
 @keyframes slideInUp {
@@ -12,6 +37,3 @@
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 .animate-slide-in-up { animation: slideInUp 0.2s ease both; }
-
-/* ── Sidebar glow on active ── */
-.sidebar-active-glow { box-shadow: inset 2px 0 0 #34d399; }

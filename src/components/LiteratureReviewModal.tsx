@@ -48,7 +48,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
         {/* Header */}
         <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
               <FileText className="w-4 h-4" />
             </div>
             <div>
@@ -65,7 +65,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
         <div className="p-5 bg-slate-950 border-b border-slate-800 space-y-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-xs text-slate-300">
-              <Layers className="w-4 h-4 text-cyan-400" />
+              <Layers className="w-4 h-4 text-amber-400" />
               <span>Generates a single unified literature review across <strong>all indexed papers</strong> in your session.</span>
             </div>
 
@@ -75,7 +75,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
                 <select
                   value={modelProvider}
                   onChange={(e) => setModelProvider(e.target.value as any)}
-                  className="bg-slate-900 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs font-medium outline-none focus:border-cyan-500 cursor-pointer"
+                  className="bg-slate-900 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs font-medium outline-none focus:border-amber-500 cursor-pointer"
                 >
                   <option value="grok">🚀 Grok (Groq: llama-3.3-70b-versatile)</option>
                   <option value="nemotron">☁️ HG Nemotron (Nvidia Nemotron 70B)</option>
@@ -86,7 +86,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
               <button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-cyan-950/50 transition-all cursor-pointer whitespace-nowrap"
+                className="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-amber-950/50 transition-all cursor-pointer whitespace-nowrap"
               >
                 {isGenerating ? (
                   <>
@@ -114,7 +114,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
         <div className="p-6 overflow-y-auto space-y-5 max-h-[65vh] text-xs leading-relaxed text-slate-200">
           {!review && !isGenerating ? (
             <div className="text-center py-16 text-slate-400 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center mx-auto text-cyan-400">
+              <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center mx-auto text-amber-400">
                 <BookOpen className="w-6 h-6" />
               </div>
               <div className="space-y-1 max-w-md mx-auto">
@@ -126,9 +126,9 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
             </div>
           ) : isGenerating ? (
             <div className="py-16 text-center space-y-4 animate-pulse">
-              <RefreshCw className="w-8 h-8 animate-spin text-cyan-400 mx-auto" />
+              <RefreshCw className="w-8 h-8 animate-spin text-amber-400 mx-auto" />
               <div className="space-y-1">
-                <p className="text-xs font-mono text-cyan-300 font-bold">Scanning Vector Repository & Indexing Chunks...</p>
+                <p className="text-xs font-mono text-amber-300 font-bold">Scanning Vector Repository & Indexing Chunks...</p>
                 <p className="text-[11px] text-slate-400">Synthesizing full multi-paper review in a single unified academic document</p>
               </div>
             </div>
@@ -137,14 +137,14 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div>
                   <h3 className="text-base font-bold text-slate-100">{review?.title}</h3>
-                  <p className="text-xs text-cyan-400 font-mono mt-0.5">
+                  <p className="text-xs text-amber-400 font-mono mt-0.5">
                     Covering {review?.papersCount || 'All'} Indexed Papers &bull; {review?.createdDate ? new Date(review.createdDate).toLocaleTimeString() : 'Just now'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleDownloadPDF}
-                    className="px-3.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-cyan-950/50 transition-all cursor-pointer"
+                    className="px-3.5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-amber-950/50 transition-all cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download PDF</span>
@@ -154,7 +154,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
                     onClick={handleCopy}
                     className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors cursor-pointer"
                   >
-                    <Copy className="w-3.5 h-3.5 text-cyan-400" />
+                    <Copy className="w-3.5 h-3.5 text-amber-400" />
                     <span>{copied ? 'Copied' : 'Copy Markdown'}</span>
                   </button>
                 </div>
@@ -163,8 +163,8 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
               {/* Review Body */}
               <div className="space-y-4 bg-slate-950 p-6 rounded-2xl border border-slate-800 text-slate-200 leading-relaxed font-sans">
                 {review?.executiveSummary && (
-                  <div className="p-4 bg-cyan-950/40 border border-cyan-800/40 rounded-xl space-y-1 text-slate-200">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">Executive Summary</span>
+                  <div className="p-4 bg-amber-950/40 border border-amber-800/40 rounded-xl space-y-1 text-slate-200">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">Executive Summary</span>
                     <p className="text-xs leading-relaxed text-slate-300">{review.executiveSummary}</p>
                   </div>
                 )}
@@ -182,7 +182,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
                     {review.citations.map((c) => (
                       <div key={c.citationId} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono font-bold text-cyan-400">[{c.citationId}] {c.paperTitle}</span>
+                          <span className="font-mono font-bold text-amber-400">[{c.citationId}] {c.paperTitle}</span>
                           <span className="text-slate-500">{c.year}</span>
                         </div>
                         <p className="text-[11px] text-slate-400 line-clamp-2 italic">"{c.snippet}"</p>
