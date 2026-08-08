@@ -49,7 +49,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-indigo-600 selection:text-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-emerald-600 selection:text-white flex flex-col">
       {/* Navigation Header */}
       <Header
         activeTab={activeTab}
@@ -67,7 +67,7 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
         {isLoadingPapers ? (
           <div className="py-24 text-center space-y-4 bg-white rounded-2xl border border-slate-200 shadow-2xs max-w-xl mx-auto mt-12">
-            <div className="w-10 h-10 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="w-10 h-10 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <div>
               <p className="text-sm font-bold text-slate-800">Initializing Vector Store</p>
               <p className="text-xs text-slate-500 font-mono mt-1">Loading Qdrant Collection & Research Papers...</p>
@@ -122,10 +122,10 @@ export default function App() {
       {activeTab !== 'chat' && !isFloatingChatOpen && (
         <button
           onClick={() => setIsFloatingChatOpen(true)}
-          className="fixed bottom-6 right-6 z-40 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-full px-4 py-3 shadow-lg hover:shadow-xl flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-full px-4 py-3 shadow-lg hover:shadow-xl flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer"
         >
           <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-          <MessageSquare className="w-4 h-4 text-indigo-100" />
+          <MessageSquare className="w-4 h-4 text-emerald-100" />
           <span>Ask Paper Chatbot</span>
         </button>
       )}

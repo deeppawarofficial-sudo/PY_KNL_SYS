@@ -36,7 +36,7 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 font-bold">
+            <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Layers className="w-4 h-4" />
             </div>
             <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
@@ -52,9 +52,9 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
           <button
             onClick={loadMatrix}
             disabled={isLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-indigo-600' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-emerald-600' : ''}`} />
             <span>{isLoading ? 'Analyzing Papers...' : 'Refresh Matrix'}</span>
           </button>
         </div>
@@ -71,7 +71,7 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
       <div className="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden">
         {isLoading ? (
           <div className="p-16 text-center space-y-3">
-            <RefreshCw className="w-8 h-8 animate-spin text-indigo-600 mx-auto" />
+            <RefreshCw className="w-8 h-8 animate-spin text-emerald-600 mx-auto" />
             <p className="text-xs font-semibold text-slate-700">Synthesizing Comparative Matrix for {papers.length} Indexed Papers...</p>
             <p className="text-[11px] text-slate-500">Extracting architectural trade-offs, indexing costs, and retrieval paradigms</p>
           </div>
@@ -97,7 +97,7 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
               <tbody className="divide-y divide-slate-200 text-slate-800">
                 {matrixData.map((item, idx) => (
                   <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    <td className="p-4 font-bold text-indigo-700 bg-slate-50/50">
+                    <td className="p-4 font-bold text-emerald-700 bg-slate-50/50">
                       <div>{item.paradigm}</div>
                       <div className="text-[10px] text-slate-500 font-normal mt-1 leading-tight">{item.paper}</div>
                     </td>
@@ -119,7 +119,7 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
                     <td className="p-4 font-mono text-slate-700">
                       {item.indexingCost}
                     </td>
-                    <td className="p-4 font-mono font-semibold text-indigo-700">
+                    <td className="p-4 font-mono font-semibold text-emerald-700">
                       {item.queryLatency}
                     </td>
                   </tr>

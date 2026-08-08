@@ -67,7 +67,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
         {/* Header */}
         <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Search className="w-5 h-5 text-indigo-400" />
+            <Search className="w-5 h-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-slate-100">Import Research Papers (Global Academic Index & ArXiv)</h3>
           </div>
           <button
@@ -87,7 +87,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
               onClick={() => { setSource('semanticscholar'); setResults([]); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 source === 'semanticscholar'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
               }`}
             >
@@ -99,7 +99,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
               onClick={() => { setSource('arxiv'); setResults([]); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 source === 'arxiv'
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
               }`}
             >
@@ -119,7 +119,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
                   : 'Search ArXiv CS/Math/Physics (e.g. ti:"GraphRAG" or abs:"Vector Search")...'
               }
 
-              className="flex-1 bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 outline-none"
+              className="flex-1 bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 outline-none"
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
 
@@ -141,7 +141,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
               <button
                 onClick={handleSearch}
                 disabled={isSearching}
-                className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0"
               >
                 {isSearching ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
                 <span>Search</span>
@@ -155,7 +155,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
                 ? 'Semantic Scholar API searches millions of CS/AI papers with AI neural relevance ranking.'
                 : 'ArXiv API searches official ArXiv manuscript database.'}
             </span>
-            {results.length > 0 && <span className="text-indigo-400 font-mono font-bold">Fetched {results.length} results</span>}
+            {results.length > 0 && <span className="text-emerald-400 font-mono font-bold">Fetched {results.length} results</span>}
           </div>
 
           {error && <p className="text-xs text-red-400">{error}</p>}
@@ -187,7 +187,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         {paper.arxivId && (
-                          <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-950 text-indigo-300 border border-indigo-800 rounded">
+                          <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 rounded">
                             ArXiv: {paper.arxivId}
                           </span>
                         )}
@@ -214,7 +214,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
                           href={paper.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 text-slate-400 hover:text-indigo-300 hover:bg-slate-800 rounded-lg transition-colors"
+                          className="p-2 text-slate-400 hover:text-emerald-300 hover:bg-slate-800 rounded-lg transition-colors"
                           title="Open PDF"
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -227,7 +227,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all ${
                           isImported
                             ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm'
+                            : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm'
                         }`}
                       >
                         {isImported ? (

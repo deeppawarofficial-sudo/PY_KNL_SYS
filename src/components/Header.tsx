@@ -30,13 +30,13 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between h-16">
           {/* Logo & Geometric Icon */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-md bg-indigo-600 flex items-center justify-center text-white font-bold shadow-2xs">
-              <Sparkles className="w-5 h-5 text-indigo-100" />
+            <div className="w-9 h-9 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold shadow-2xs">
+              <Sparkles className="w-5 h-5 text-emerald-100" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">AI Knowledge Synthesizer</h1>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider rounded-md">
+                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase tracking-wider rounded-md">
                   Multi-Paper RAG
                 </span>
               </div>
@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('synthesize')}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === 'synthesize'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-emerald-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('chat')}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === 'chat'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-emerald-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('library')}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === 'library'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-emerald-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('comparison')}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === 'comparison'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-emerald-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('graph')}
               className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                 activeTab === 'graph'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  ? 'bg-emerald-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
@@ -116,15 +116,15 @@ export const Header: React.FC<HeaderProps> = ({
               title="View RAG Architecture & Pipeline"
               className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-md transition-colors cursor-pointer"
             >
-              <Cpu className="w-3.5 h-3.5 text-indigo-600" />
+              <Cpu className="w-3.5 h-3.5 text-emerald-600" />
               <span>Pipeline Info</span>
             </button>
 
             <button
               onClick={onOpenReviewModal}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-md transition-colors cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-md transition-colors cursor-pointer"
             >
-              <FileText className="w-3.5 h-3.5 text-indigo-600" />
+              <FileText className="w-3.5 h-3.5 text-emerald-600" />
               <span>Literature Review</span>
             </button>
 
@@ -138,9 +138,9 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={onOpenUploadModal}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors shadow-2xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition-colors shadow-2xs cursor-pointer"
             >
-              <Upload className="w-3.5 h-3.5 text-indigo-100" />
+              <Upload className="w-3.5 h-3.5 text-emerald-100" />
               <span className="hidden sm:inline">Upload Paper</span>
             </button>
 
@@ -174,8 +174,8 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-300">
-            <span className="px-1.5 py-0.5 rounded bg-indigo-950 border border-indigo-800 text-[10px] uppercase font-bold text-indigo-300 tracking-wider">
+          <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-300">
+            <span className="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 text-[10px] uppercase font-bold text-emerald-300 tracking-wider">
               Gemini 3.6 Flash
             </span>
           </div>

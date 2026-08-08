@@ -166,7 +166,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
         {msg.citations && msg.citations.length > 0 && (
           <div className="mt-3 pt-3 border-t border-slate-200/80 bg-slate-50/80 -mx-1 px-3 py-2.5 rounded-lg">
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
-              <Quote className="w-3.5 h-3.5 text-indigo-600" />
+              <Quote className="w-3.5 h-3.5 text-emerald-600" />
               <span>Grounded Evidence ({msg.citations.length} Citations)</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -177,10 +177,10 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                     if (onSelectCitation) onSelectCitation(cite);
                     setActiveCitationPreview(cite);
                   }}
-                  className="group flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-white text-indigo-700 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-md shadow-2xs transition-all text-left"
+                  className="group flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-white text-emerald-700 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-md shadow-2xs transition-all text-left"
                 >
-                  <span className="font-mono font-bold text-indigo-600">[{cite.citationId}]</span>
-                  <span className="truncate max-w-[180px] text-slate-700 group-hover:text-indigo-900">
+                  <span className="font-mono font-bold text-emerald-600">[{cite.citationId}]</span>
+                  <span className="truncate max-w-[180px] text-slate-700 group-hover:text-emerald-900">
                     {cite.paperTitle}
                   </span>
                   <span className="text-[10px] text-slate-400">p.{cite.pageNumber}</span>
@@ -204,8 +204,8 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {/* Top Header - Geometric Balance Style */}
       <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-white shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center text-white font-bold shadow-xs">
-            <Bot className="w-4 h-4 text-indigo-100" />
+          <div className="w-8 h-8 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold shadow-xs">
+            <Bot className="w-4 h-4 text-emerald-100" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -240,7 +240,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {/* Scope Filter Bar */}
       <div className="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between gap-2 shrink-0 text-xs">
         <div className="flex items-center gap-2 text-slate-600 font-medium">
-          <BookOpen className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+          <BookOpen className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
           <span className="uppercase tracking-widest text-[10px] font-bold text-slate-400">
             Scope:
           </span>
@@ -254,7 +254,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
               setActiveScopePaperId(val);
               if (onSelectPaperId) onSelectPaperId(val);
             }}
-            className="w-full bg-white text-slate-800 border border-slate-200 rounded-md py-1 px-2 pr-6 text-xs font-medium focus:outline-none focus:border-indigo-500 truncate appearance-none cursor-pointer shadow-2xs"
+            className="w-full bg-white text-slate-800 border border-slate-200 rounded-md py-1 px-2 pr-6 text-xs font-medium focus:outline-none focus:border-emerald-500 truncate appearance-none cursor-pointer shadow-2xs"
           >
             <option value="">🌐 Entire Repository ({papers.length} Papers)</option>
             {papers.map((p) => (
@@ -281,13 +281,13 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
               className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-xs font-bold ${
                 msg.role === 'user'
                   ? 'bg-slate-800 text-slate-100'
-                  : 'bg-indigo-600 text-white shadow-2xs'
+                  : 'bg-emerald-600 text-white shadow-2xs'
               }`}
             >
               {msg.role === 'user' ? (
                 <User className="w-3.5 h-3.5" />
               ) : (
-                <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
+                <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
               )}
             </div>
 
@@ -295,14 +295,14 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
             <div
               className={`relative max-w-[85%] rounded-xl p-3.5 border shadow-2xs ${
                 msg.role === 'user'
-                  ? 'bg-indigo-600 text-white border-indigo-700'
+                  ? 'bg-emerald-600 text-white border-emerald-700'
                   : 'bg-white text-slate-800 border-slate-200'
               }`}
             >
               {/* Top Meta info */}
               <div
                 className={`flex items-center justify-between gap-4 mb-1.5 text-[10px] font-mono ${
-                  msg.role === 'user' ? 'text-indigo-200' : 'text-slate-400'
+                  msg.role === 'user' ? 'text-emerald-200' : 'text-slate-400'
                 }`}
               >
                 <span className="font-bold">
@@ -341,11 +341,11 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
         {/* Loading Spinner Indicator */}
         {isLoading && (
           <div className="flex items-start gap-3">
-            <div className="w-7 h-7 rounded-md bg-indigo-600 text-white flex items-center justify-center shrink-0">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-200" />
+            <div className="w-7 h-7 rounded-md bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-200" />
             </div>
             <div className="bg-white border border-slate-200 rounded-xl p-3.5 text-slate-600 text-xs flex items-center gap-2 shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
               <span>Retrieving vector chunks and synthesizing answer...</span>
             </div>
           </div>
@@ -358,7 +358,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {messages.length < 5 && (
         <div className="bg-white border-t border-slate-200 p-2.5 shrink-0">
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 px-1 flex items-center gap-1">
-            <Info className="w-3 h-3 text-indigo-500" />
+            <Info className="w-3 h-3 text-emerald-500" />
             <span>Suggested Research Questions</span>
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto">
@@ -367,7 +367,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                 key={idx}
                 onClick={() => handleSend(q)}
                 disabled={isLoading}
-                className="text-left text-[11px] bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-800 border border-slate-200 hover:border-indigo-300 px-2.5 py-1 rounded-md transition-colors truncate max-w-full"
+                className="text-left text-[11px] bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 px-2.5 py-1 rounded-md transition-colors truncate max-w-full"
               >
                 {q}
               </button>
@@ -395,13 +395,13 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                 : 'Ask a research question across all indexed papers...'
             }
             disabled={isLoading}
-            className="flex-1 bg-slate-50 text-slate-900 text-xs sm:text-sm border border-slate-200 rounded-lg px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all placeholder:text-slate-400"
+            className="flex-1 bg-slate-50 text-slate-900 text-xs sm:text-sm border border-slate-200 rounded-lg px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all placeholder:text-slate-400"
           />
 
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer disabled:cursor-not-allowed"
+            className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer disabled:cursor-not-allowed"
           >
             <span>Ask</span>
             <Send className="w-3.5 h-3.5" />
@@ -411,22 +411,22 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
 
       {/* Inline Citation Quick Preview Drawer */}
       {activeCitationPreview && (
-        <div className="bg-indigo-950 text-indigo-100 p-3 border-t border-indigo-900 text-xs shrink-0 animate-in slide-in-from-bottom">
+        <div className="bg-emerald-950 text-emerald-100 p-3 border-t border-emerald-900 text-xs shrink-0 animate-in slide-in-from-bottom">
           <div className="flex items-center justify-between mb-1">
-            <span className="font-bold text-indigo-300 font-mono">
+            <span className="font-bold text-emerald-300 font-mono">
               [{activeCitationPreview.citationId}] {activeCitationPreview.paperTitle} ({activeCitationPreview.year})
             </span>
             <button
               onClick={() => setActiveCitationPreview(null)}
-              className="text-indigo-400 hover:text-white font-mono text-xs font-bold"
+              className="text-emerald-400 hover:text-white font-mono text-xs font-bold"
             >
               ✕
             </button>
           </div>
-          <p className="text-[11px] text-indigo-200 line-clamp-2 italic bg-indigo-900/60 p-2 rounded border border-indigo-800">
+          <p className="text-[11px] text-emerald-200 line-clamp-2 italic bg-emerald-900/60 p-2 rounded border border-emerald-800">
             "{activeCitationPreview.snippet}"
           </p>
-          <div className="mt-1 flex items-center justify-between text-[10px] text-indigo-400 font-mono">
+          <div className="mt-1 flex items-center justify-between text-[10px] text-emerald-400 font-mono">
             <span>Section: {activeCitationPreview.sectionName}</span>
             <span>Page {activeCitationPreview.pageNumber}</span>
           </div>

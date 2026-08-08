@@ -38,10 +38,10 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
             <button
               key={i}
               onClick={() => onCitationClick(citation)}
-              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 text-xs font-mono font-semibold text-indigo-300 bg-indigo-950/90 hover:bg-indigo-900 border border-indigo-700/80 rounded transition-all cursor-pointer shadow-sm hover:scale-105"
+              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 text-xs font-mono font-semibold text-emerald-300 bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-700/80 rounded transition-all cursor-pointer shadow-sm hover:scale-105"
               title={`View Source: "${citation.paperTitle}" (${citation.year}) - ${citation.sectionName}`}
             >
-              <BookOpen className="w-3 h-3 text-indigo-400" />
+              <BookOpen className="w-3 h-3 text-emerald-400" />
               <span>[{citeId}]</span>
             </button>
           );
@@ -73,7 +73,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
         <div className="flex items-center gap-2">
           <button
             onClick={() => exportSynthesisPDF(result)}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 border border-indigo-600 rounded-lg transition-colors cursor-pointer shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 border border-emerald-600 rounded-lg transition-colors cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download PDF Report</span>
@@ -92,7 +92,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       {/* Main Synthesized Content */}
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs space-y-6">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
-          <div className="w-7 h-7 rounded bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 font-bold">
+          <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
             <Sparkles className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Multi-Paper Knowledge Synthesis</h3>
@@ -110,7 +110,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       {result.comparisonMatrix && (
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
           <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
-            <div className="w-7 h-7 rounded bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 font-bold">
+            <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Layers className="w-4 h-4" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Comparative Methodological Matrix</h3>
@@ -129,7 +129,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
               <tbody className="divide-y divide-slate-200 text-slate-800">
                 {result.comparisonMatrix.items.map((item, idx) => (
                   <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    <td className="p-3 font-semibold text-indigo-700">
+                    <td className="p-3 font-semibold text-emerald-700">
                       <div>{item.paperTitle}</div>
                       <div className="text-[10px] text-slate-500 font-normal">({item.year}) - {item.authors[0]} et al.</div>
                     </td>
@@ -161,16 +161,16 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
             <div
               key={cite.citationId}
               onClick={() => onCitationClick(cite)}
-              className="group bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
+              className="group bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
             >
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-indigo-700 bg-white border border-slate-200 rounded">
+                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-emerald-700 bg-white border border-slate-200 rounded">
                     [{cite.citationId}]
                   </span>
                   <span className="text-[11px] text-slate-500 font-mono">Page {cite.pageNumber}</span>
                 </div>
-                <h4 className="text-xs font-semibold text-slate-900 group-hover:text-indigo-900 transition-colors line-clamp-1">
+                <h4 className="text-xs font-semibold text-slate-900 group-hover:text-emerald-900 transition-colors line-clamp-1">
                   {cite.paperTitle}
                 </h4>
                 <p className="text-[11px] text-slate-500">

@@ -21,7 +21,7 @@ export const CitationInspectorModal: React.FC<CitationInspectorModalProps> = ({
         {/* Header */}
         <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 text-xs font-mono font-bold text-indigo-300 bg-indigo-950 border border-indigo-800 rounded">
+            <span className="px-2 py-0.5 text-xs font-mono font-bold text-emerald-300 bg-emerald-950 border border-emerald-800 rounded">
               Citation [{citation.citationId}]
             </span>
             <h3 className="text-sm font-bold text-slate-100">Vector Chunk Source Inspection</h3>
@@ -39,7 +39,7 @@ export const CitationInspectorModal: React.FC<CitationInspectorModalProps> = ({
           {/* Paper Info Card */}
           <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-indigo-400 font-mono font-medium">Source Document</span>
+              <span className="text-xs text-emerald-400 font-mono font-medium">Source Document</span>
               <span className="text-xs text-slate-400 font-mono">Published {citation.year}</span>
             </div>
             <h4 className="text-base font-bold text-slate-100 leading-snug">
@@ -75,11 +75,11 @@ export const CitationInspectorModal: React.FC<CitationInspectorModalProps> = ({
           </div>
 
           {/* RAG Verification Note */}
-          <div className="bg-indigo-950/40 border border-indigo-900/60 rounded-xl p-3.5 flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+          <div className="bg-emerald-950/40 border border-emerald-900/60 rounded-xl p-3.5 flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-xs space-y-1">
-              <p className="font-semibold text-indigo-200">Fact-Checked Vector Grounding</p>
-              <p className="text-indigo-300/80 leading-normal">
+              <p className="font-semibold text-emerald-200">Fact-Checked Vector Grounding</p>
+              <p className="text-emerald-300/80 leading-normal">
                 This exact paragraph was retrieved from the Qdrant vector database via hybrid semantic similarity and passed to Gemini 3.6 Flash for precise synthesis.
               </p>
             </div>
@@ -91,7 +91,7 @@ export const CitationInspectorModal: React.FC<CitationInspectorModalProps> = ({
           <span className="text-slate-400 font-mono">Qdrant Vector Database Verified</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-colors"
           >
             Done Inspecting
           </button>
