@@ -1,37 +1,38 @@
 @import "tailwindcss";
 
 /* ────────────────────────────────────────────────
-   AMBER + CHARCOAL THEME
-   Override Tailwind's slate palette with custom
-   warm charcoal values
+   MIDNIGHT BLUE THEME
+   Background:  #0A0E1A (deep) / #0F1629 (panels)
+   Accent:      #3B82F6 / #60A5FA (blue)
+   Text:        #E2E8F0
 ──────────────────────────────────────────────── */
 @theme {
-  /* Charcoal background scale */
-  --color-slate-950: #111318;
-  --color-slate-900: #1C1F26;
-  --color-slate-800: #252932;
-  --color-slate-700: #2E3340;
-  --color-slate-600: #3A3F4A;
-  --color-slate-500: #515763;
-  --color-slate-400: #717785;
-  --color-slate-300: #9CA3AF;
-  --color-slate-200: #D1D5DB;
-  --color-slate-100: #F3F4F6;
-  --color-slate-50:  #F9FAFB;
+  /* Midnight blue background scale */
+  --color-slate-950: #0A0E1A;
+  --color-slate-900: #0F1629;
+  --color-slate-800: #162040;
+  --color-slate-700: #1E2D55;
+  --color-slate-600: #2A3D6A;
+  --color-slate-500: #3D527A;
+  --color-slate-400: #6B7FA8;
+  --color-slate-300: #93A8CB;
+  --color-slate-200: #C5D1E8;
+  --color-slate-100: #E2E8F0;
+  --color-slate-50:  #F0F4FA;
 
-  /* Keep amber as primary accent */
-  --color-amber-400: #FBBF24;
-  --color-amber-500: #F59E0B;
-  --color-amber-600: #D97706;
+  /* Blue accent */
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #2563EB;
 }
 
-/* ── Scrollbar: warm dark thin style ── */
+/* ── Scrollbar: midnight blue ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2E3340; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #3A3F4A; }
+::-webkit-scrollbar-thumb { background: #1E2D55; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #2A3D6A; }
 
-/* ── SpeedDial slide-in animation ── */
+/* ── SpeedDial animation ── */
 @keyframes slideInUp {
   from { opacity: 0; transform: translateY(10px) scale(0.95); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }

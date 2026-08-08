@@ -18,7 +18,7 @@ export const KnowledgeGraphView: React.FC = () => {
   if (isLoading || !data) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-500 space-y-3 shadow-2xs">
-        <RefreshCw className="w-6 h-6 animate-spin text-amber-600 mx-auto" />
+        <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mx-auto" />
         <p className="text-xs font-mono">Loading Research Knowledge Graph Network...</p>
       </div>
     );
@@ -30,7 +30,7 @@ export const KnowledgeGraphView: React.FC = () => {
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
+            <div className="w-7 h-7 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 font-bold">
               <Network className="w-4 h-4" />
             </div>
             <h2 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Research Knowledge Graph & Concept Map</h2>
@@ -41,16 +41,16 @@ export const KnowledgeGraphView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 text-xs font-mono">
-          <span className="flex items-center gap-1.5 text-amber-700 font-semibold">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+          <span className="flex items-center gap-1.5 text-blue-700 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
             Papers ({data.nodes.filter((n) => n.type === 'paper').length})
           </span>
-          <span className="flex items-center gap-1.5 text-amber-700 font-semibold">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+          <span className="flex items-center gap-1.5 text-blue-700 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
             Methodologies ({data.nodes.filter((n) => n.type === 'methodology').length})
           </span>
-          <span className="flex items-center gap-1.5 text-amber-700 font-semibold">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
+          <span className="flex items-center gap-1.5 text-blue-700 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
             Concepts ({data.nodes.filter((n) => n.type === 'concept').length})
           </span>
         </div>
@@ -111,7 +111,7 @@ export const KnowledgeGraphView: React.FC = () => {
               const y = 240 + Math.sin(angle) * 170;
 
               const isSelected = selectedNode?.id === node.id;
-              let fill = '#F59E0B'; // emerald
+              let fill = '#3B82F6'; // emerald
               if (node.type === 'methodology') fill = '#0891b2'; // cyan
               if (node.type === 'concept') fill = '#d97706'; // amber
 
@@ -149,7 +149,7 @@ export const KnowledgeGraphView: React.FC = () => {
         {/* Node Inspector Drawer (4 cols) */}
         <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
           <div className="border-b border-slate-800 pb-3 flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
+            <div className="w-6 h-6 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 font-bold">
               <Sparkles className="w-3.5 h-3.5" />
             </div>
             <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Knowledge Node Inspector</h3>
@@ -158,7 +158,7 @@ export const KnowledgeGraphView: React.FC = () => {
           {selectedNode ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 text-xs font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200 rounded capitalize">
+                <span className="px-2 py-0.5 text-xs font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 rounded capitalize">
                   {selectedNode.type}
                 </span>
                 <span className="text-xs text-slate-500 font-mono">ID: {selectedNode.id}</span>
@@ -179,7 +179,7 @@ export const KnowledgeGraphView: React.FC = () => {
                     .filter((l) => l.source === selectedNode.id || l.target === selectedNode.id)
                     .map((l, i) => (
                       <div key={i} className="bg-slate-800/50 p-2 rounded border border-slate-800 text-[11px] font-mono text-slate-300">
-                        {l.source} ➔ <span className="text-amber-600 font-bold">{l.relationship}</span> ➔ {l.target}
+                        {l.source} ➔ <span className="text-blue-600 font-bold">{l.relationship}</span> ➔ {l.target}
                       </div>
                     ))}
                 </div>

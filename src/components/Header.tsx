@@ -15,12 +15,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenArchitectureModal }) => {
 
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-md bg-amber-600 flex items-center justify-center shadow-md shadow-amber-950/50">
+            <div className="w-7 h-7 rounded-md bg-blue-600 flex items-center justify-center shadow-md shadow-blue-950/50">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div className="flex items-center gap-2.5">
               <h1 className="text-sm font-bold text-slate-100 tracking-tight">AI Knowledge Synthesizer</h1>
-              <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider rounded-md">
+              <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase tracking-wider rounded-md">
                 Multi-Paper RAG
               </span>
             </div>
@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenArchitectureModal }) => {
             {/* Pipeline button */}
             <button
               onClick={onOpenArchitectureModal}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-amber-400 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/30 rounded-md transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-blue-400 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/30 rounded-md transition-all cursor-pointer"
             >
               <Cpu className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">Pipeline</span>

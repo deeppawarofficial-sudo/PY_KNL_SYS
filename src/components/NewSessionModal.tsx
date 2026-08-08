@@ -44,7 +44,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 font-bold">
             <RotateCcw className="w-5 h-5" />
           </div>
           <div>
@@ -71,12 +71,12 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             onClick={() => setSelectedMode('empty')}
             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
               selectedMode === 'empty'
-                ? 'bg-amber-50/80 border-amber-600 shadow-2xs'
+                ? 'bg-blue-50/80 border-blue-600 shadow-2xs'
                 : 'bg-slate-800/50 hover:bg-slate-800/70 border-slate-800'
             }`}
           >
             <div className={`mt-0.5 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-              selectedMode === 'empty' ? 'border-amber-600 bg-amber-600 text-white' : 'border-slate-700'
+              selectedMode === 'empty' ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-700'
             }`}>
               {selectedMode === 'empty' && <Check className="w-3 h-3 stroke-[3]" />}
             </div>
@@ -96,18 +96,18 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             onClick={() => setSelectedMode('preset')}
             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
               selectedMode === 'preset'
-                ? 'bg-amber-50/80 border-amber-600 shadow-2xs'
+                ? 'bg-blue-50/80 border-blue-600 shadow-2xs'
                 : 'bg-slate-800/50 hover:bg-slate-800/70 border-slate-800'
             }`}
           >
             <div className={`mt-0.5 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-              selectedMode === 'preset' ? 'border-amber-600 bg-amber-600 text-white' : 'border-slate-700'
+              selectedMode === 'preset' ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-700'
             }`}>
               {selectedMode === 'preset' && <Check className="w-3 h-3 stroke-[3]" />}
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-amber-600" />
+                <BookOpen className="w-4 h-4 text-blue-600" />
                 <h4 className="text-xs font-bold text-slate-100">Reset to Default Landmark Papers</h4>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -130,7 +130,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             type="button"
             onClick={handleStartSession}
             disabled={isResetting}
-            className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 disabled:opacity-50 transition-all shadow-2xs cursor-pointer flex items-center gap-2"
+            className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition-all shadow-2xs cursor-pointer flex items-center gap-2"
           >
             {isResetting && <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
             <span>{selectedMode === 'empty' ? 'Clear & Start Fresh' : 'Reset Session'}</span>
