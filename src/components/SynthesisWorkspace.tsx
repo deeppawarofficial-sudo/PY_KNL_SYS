@@ -48,6 +48,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
   const [topK, setTopK] = useState(8);
   const [enableHybrid, setEnableHybrid] = useState(true);
   const [minSimilarity, setMinSimilarity] = useState(0.02);
+  const [modelProvider, setModelProvider] = useState<'auto' | 'nemotron' | 'grok' | 'grounded'>('auto');
 
   const [isLoading, setIsLoading] = useState(false);
   const [synthesisStep, setSynthesisStep] = useState<string>('');
@@ -65,7 +66,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
     try {
       setTimeout(() => setSynthesisStep('Computing Cosine Similarity & BM25 Hybrid Scores...'), 400);
       setTimeout(() => setSynthesisStep('Building Multi-Paper Context & Structuring Citations...'), 900);
-      setTimeout(() => setSynthesisStep('Gemini 3.6 Flash Synthesizing Multi-Paper Answer...'), 1400);
+      setTimeout(() => setSynthesisStep(`Synthesizing Answer via ${modelProvider === 'nemotron' ? 'Nvidia Nemotron Cloud API' : modelProvider === 'grok' ? 'Groq (Grok) Cloud API' : 'Academic RAG Engine'}...`), 1400);
 
       const res = await synthesizeResearch({
         query: activeQuery,
@@ -73,6 +74,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
         topK,
         minSimilarity,
         enableHybrid,
+        modelProvider,
       });
 
       setResult(res);
@@ -173,6 +175,19 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
         <div className="border-t border-slate-200 pt-3 flex flex-wrap items-center justify-between gap-4 text-xs">
           {/* Sliders & Toggles */}
           <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-slate-500 font-medium">Model Engine:</span>
+              <select
+                value={modelProvider}
+                onChange={(e) => setModelProvider(e.target.value as any)}
+                className="bg-indigo-50/70 border border-indigo-200 rounded px-2.5 py-1 text-indigo-950 font-semibold text-xs outline-none focus:border-indigo-500 cursor-pointer shadow-2xs"
+              >
+                <option value="grok">🚀 Grok (Groq: llama-3.3-70b-versatile)</option>
+                <option value="nemotron">☁️ HG Nemotron (Nvidia Nemotron 70B)</option>
+                <option value="grounded">📄 Grounded Academic RAG Engine</option>
+              </select>
+            </div>
+
             <div className="flex items-center gap-2">
               <span className="text-slate-500 font-medium">Top K Chunks:</span>
               <select

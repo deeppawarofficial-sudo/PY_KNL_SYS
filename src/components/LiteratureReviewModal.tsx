@@ -13,12 +13,13 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [modelProvider, setModelProvider] = useState<'auto' | 'nemotron' | 'grok' | 'grounded'>('auto');
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     setError(null);
     try {
-      const res = await generateLiteratureReview('All');
+      const res = await generateLiteratureReview('All', modelProvider);
       setReview(res);
     } catch (err: any) {
       setError(err.message || 'Failed to generate literature review');
@@ -29,9 +30,8 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
 
   const handleCopy = () => {
     if (!review) return;
-    const text = `# ${review.title}\n\n${review.executiveSummary || ''}\n\n${
-      review.content || (typeof review.sections === 'string' ? review.sections : '')
-    }`;
+    const text = `# ${review.title}\n\n${review.executiveSummary || ''}\n\n${review.content || (typeof review.sections === 'string' ? review.sections : '')
+      }`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -69,23 +69,38 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
               <span>Generates a single unified literature review across <strong>all indexed papers</strong> in your session.</span>
             </div>
 
-            <button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/50 transition-all cursor-pointer"
-            >
-              {isGenerating ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Synthesizing Full Literature Review...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>Generate Single Review Summary</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="flex items-center gap-1.5 text-xs text-slate-300">
+                <span className="text-slate-400 font-medium">Engine:</span>
+                <select
+                  value={modelProvider}
+                  onChange={(e) => setModelProvider(e.target.value as any)}
+                  className="bg-slate-900 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs font-medium outline-none focus:border-indigo-500 cursor-pointer"
+                >
+                  <option value="grok">🚀 Grok (Groq: llama-3.3-70b-versatile)</option>
+                  <option value="nemotron">☁️ HG Nemotron (Nvidia Nemotron 70B)</option>
+                  <option value="grounded">📄 Grounded Academic RAG Engine</option>
+                </select>
+              </div>
+
+              <button
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/50 transition-all cursor-pointer whitespace-nowrap"
+              >
+                {isGenerating ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Synthesizing Review...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Generate Review</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           {error && (

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from services.vector_store import get_all_papers, search_vector_store
 from services.nemotron_llm import generate_nemotron_chat
+from services.grok_llm import generate_grok_chat
 
 router = APIRouter(tags=["Knowledge & Chat"])
 
@@ -13,6 +14,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[ChatMessage]
     paperId: Optional[str] = None
+    modelProvider: Optional[str] = "auto"  # 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
 
 @router.get("/api/knowledge-graph")
 async def get_knowledge_graph():
@@ -91,10 +93,17 @@ async def chat_assistant(req: ChatRequest):
         context_str = "\n\n".join(context_lines)
         messages_history = [{"role": m.role, "content": m.content} for m in req.messages]
 
-        answer = await generate_nemotron_chat(
-            messages_history=messages_history,
-            context_str=context_str
-        )
+        # Dispatch to selected model
+        if req.modelProvider == "grok":
+            answer = await generate_grok_chat(
+                messages_history=messages_history,
+                context_str=context_str
+            )
+        else:
+            answer = await generate_nemotron_chat(
+                messages_history=messages_history,
+                context_str=context_str
+            )
 
         paper_title = None
         if req.paperId:

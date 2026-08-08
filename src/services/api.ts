@@ -315,6 +315,7 @@ export async function synthesizeResearch(params: {
   topK?: number;
   minSimilarity?: number;
   enableHybrid?: boolean;
+  modelProvider?: 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded';
 }): Promise<SynthesisResult> {
   const res = await safeFetch('/api/rag/synthesize', {
     method: 'POST',
@@ -328,11 +329,14 @@ export async function synthesizeResearch(params: {
   return res.json();
 }
 
-export async function generateLiteratureReview(topicCategory?: string): Promise<LiteratureReview> {
+export async function generateLiteratureReview(
+  topicCategory?: string,
+  modelProvider?: 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
+): Promise<LiteratureReview> {
   const res = await safeFetch('/api/rag/generate-review', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ topicCategory: topicCategory || 'All' }),
+    body: JSON.stringify({ topicCategory: topicCategory || 'All', modelProvider }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -359,6 +363,7 @@ export async function fetchKnowledgeGraph(): Promise<KnowledgeGraphData> {
 export async function sendChatMessage(params: {
   messages: Array<{ role: 'user' | 'assistant'; content: string }>;
   paperId?: string;
+  modelProvider?: 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded';
 }): Promise<{
   answer: string;
   citations: Citation[];

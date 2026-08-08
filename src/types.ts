@@ -13,6 +13,7 @@ export interface Paper {
   topicCategory: string;
   fullText?: string;
   doi?: string;
+  journal?: string;
 }
 
 export interface PaperChunk {

@@ -6,6 +6,7 @@ from services.vector_store import search_vector_store, get_all_papers
 from chains.rag_synthesis import run_rag_synthesis
 from chains.literature_review import run_literature_review
 from chains.comparison_matrix import run_comparison_matrix
+from services.grok_llm import generate_grok_response
 
 router = APIRouter(prefix="/api/rag", tags=["RAG & Nemotron"])
 
@@ -18,9 +19,11 @@ class RagSearchRequest(BaseModel):
 class RagSynthesizeRequest(BaseModel):
     query: str
     paperIds: Optional[List[str]] = None
+    modelProvider: Optional[str] = "auto"  # 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
 
 class LitReviewRequest(BaseModel):
     topicCategory: Optional[str] = "All"
+    modelProvider: Optional[str] = "auto"  # 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
 
 @router.post("/search")
 async def rag_search(req: RagSearchRequest):
@@ -61,8 +64,18 @@ async def rag_synthesize(req: RagSynthesizeRequest):
 
         context_str = "\n\n".join(context_lines)
 
-        # Execute Nemotron synthesis chain
-        answer = await run_rag_synthesis(query=req.query, context_str=context_str)
+        # Dispatch to the selected model engine
+        if req.modelProvider == "grok":
+            system_prompt = (
+                "You are an elite AI Research Assistant powered by Groq (Grok) LLM. "
+                "Synthesize an authoritative research response for the user query based on the retrieved vector evidence. "
+                "Include verifiable inline citations [C1], [C2], etc. matching the context excerpts."
+            )
+            prompt = f"""USER RESEARCH QUERY:\n{req.query}\n\nRETRIEVED MULTI-PAPER VECTOR EXCERPTS:\n{context_str}\n\nSYNTHESIZED RESPONSE:"""
+            answer = await generate_grok_response(prompt=prompt, system_prompt=system_prompt, temperature=0.2, max_tokens=2000)
+        else:
+            # Default: Nemotron synthesis chain
+            answer = await run_rag_synthesis(query=req.query, context_str=context_str)
 
         elapsed_ms = int((time.time() - start_time) * 1000)
 
@@ -105,12 +118,21 @@ async def generate_literature_review(req: LitReviewRequest):
         catalog_str = "\n\n".join([f"PAPER [P{idx+1}]: \"{p['title']}\" ({p['year']}) by {', '.join(p.get('authors', []))}\nAbstract: {p['abstract']}" for idx, p in enumerate(all_papers)])
         context_str = "\n\n".join(context_lines)
 
-        # Execute Nemotron Literature Review chain
-        review_text = await run_literature_review(
-            paper_count=len(all_papers),
-            catalog_str=catalog_str,
-            context_str=context_str
-        )
+        # Dispatch to the selected model engine
+        if req.modelProvider == "grok":
+            grok_system = (
+                "You are an expert AI Research Synthesizer powered by Groq (Grok) LLM. "
+                "Generate a unified, single-document Literature Review report analyzing ALL indexed papers."
+            )
+            grok_prompt = f"""Generate a comprehensive scientific Literature Review covering ALL {len(all_papers)} research papers currently indexed.\n\nINDEXED PAPERS CATALOG:\n{catalog_str}\n\nRETRIEVED VECTOR EXCERPTS:\n{context_str}\n\nStructure with clear Markdown headings. Use inline citations [C1], [C2] where applicable.\n\nLITERATURE REVIEW:"""
+            review_text = await generate_grok_response(prompt=grok_prompt, system_prompt=grok_system, temperature=0.25, max_tokens=3000)
+        else:
+            # Default: Nemotron literature review chain
+            review_text = await run_literature_review(
+                paper_count=len(all_papers),
+                catalog_str=catalog_str,
+                context_str=context_str
+            )
 
         return {
             "title": f"State-of-the-Art Multi-Paper Literature Review ({len(all_papers)} Indexed Papers)",

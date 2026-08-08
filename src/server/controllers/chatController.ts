@@ -6,7 +6,7 @@ import { Citation } from '../../types.js';
 
 export async function chatWithPaper(req: Request, res: Response) {
   try {
-    const { messages, paperId, topK = 6 } = req.body;
+    const { messages, paperId, topK = 6, modelProvider } = req.body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'Messages array is required for chat.' });
@@ -76,6 +76,7 @@ Answer the user question directly and accurately using inline citations [C1], [C
       messages: messages.map((m: any) => ({ role: m.role, content: m.content })),
       prompt: chatPrompt,
       temperature: 0.3,
+      modelProvider,
     });
 
     res.json({

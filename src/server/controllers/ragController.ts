@@ -22,7 +22,7 @@ export function searchRag(req: Request, res: Response) {
 export async function synthesizeRag(req: Request, res: Response) {
   const startTime = Date.now();
   try {
-    const { query, paperIds, topK = 8, minSimilarity = 0.02, enableHybrid = true } = req.body;
+    const { query, paperIds, topK = 8, minSimilarity = 0.02, enableHybrid = true, modelProvider } = req.body;
 
     if (!query) {
       return res.status(400).json({ error: 'Research query is required' });
@@ -51,17 +51,13 @@ export async function synthesizeRag(req: Request, res: Response) {
       };
     });
 
+
     const contextPrompt = citations
       .map(
         (c) =>
-          `SOURCE CITATION [${c.citationId}]:
-Paper Title: "${c.paperTitle}" (${c.year}) by ${c.authors.join(', ')}
-Section: ${c.sectionName} (Page ${c.pageNumber})
-Excerpts:
-${c.snippet}
-`
+          `[${c.citationId}] "${c.paperTitle}" (${c.year}): ${c.snippet.slice(0, 600)}`
       )
-      .join('\n----------------------------------------\n');
+      .join('\n\n');
 
     const systemInstruction = `You are the AI Knowledge Synthesizer, an expert multi-paper research assistant powered by Nvidia Nemotron LLM.
 Your goal is to answer research questions by synthesizing information across multiple scientific papers.
@@ -90,7 +86,9 @@ Include:
       systemInstruction,
       prompt: userPrompt,
       temperature: 0.3,
+      modelProvider,
     });
+
 
     const executionTimeMs = Date.now() - startTime;
     const paperIdsUsed = Array.from(new Set(citations.map((c) => c.paperId)));
@@ -159,6 +157,7 @@ Include:
 
 export async function generateLiteratureReview(req: Request, res: Response) {
   try {
+    const { modelProvider } = req.body || {};
     const allPapers = getAllPapers();
 
     if (allPapers.length === 0) {
@@ -205,8 +204,8 @@ Abstract: ${p.abstract}`
       )
       .join('\n\n');
 
-    const prompt = `You are an expert AI Research Assistant & Literature Review Synthesizer.
-Your goal is to generate a unified, comprehensive, single-document Literature Review report that synthesizes ALL ${allPapers.length} research papers currently indexed in our repository.
+    const prompt = `You are an expert AI Senior Research Scientist & Literature Review Synthesizer.
+Your goal is to write a publication-quality, thesis-grade Systematic Literature Review synthesizing ALL ${allPapers.length} research papers currently indexed in our repository.
 
 ==================================================
 INDEXED PAPERS CATALOG (${allPapers.length} PAPERS TOTAL):
@@ -218,15 +217,30 @@ RETRIEVED MULTI-PAPER VECTOR EXCERPTS:
 ==================================================
 ${contextStr}
 
-CRITICAL REQUIREMENTS:
-1. Cover ALL ${allPapers.length} indexed papers in this single literature review synthesis! Do not omit any paper.
-2. Structure the review into clear, formal sections with Markdown headings.
-3. Use inline citations e.g. [C1], [C2] or explicit paper titles where relevant.`;
+MANDATORY PUBLICATION-QUALITY REQUIREMENTS (FOLLOW ALL STRICTLY):
+1. **NO Generic Placeholders**: Extract real objectives, methodologies, datasets, algorithms, and results. Never use generic filler phrases like "presents empirical investigations".
+2. **Accurate Bibliographic Info**: Use full real author names, real publication years, and complete paper titles.
+3. **True Thematic Synthesis (Not Paper-by-Paper Summaries)**: Group analysis by thematic topics (e.g. Architectures, Optimization Methods, Empirical Benchmarks, Operational Challenges, Ethics). Discuss multiple papers together within each theme.
+4. **Markdown Comparative Analysis Table**: Include a comprehensive Markdown table comparing all papers across columns:
+   | Authors | Year | Research Objective | Methodology & Model | Dataset / Benchmarks | Key Findings | Strengths | Limitations |
+5. **Critical Analysis & Research Gaps**: Evaluate strengths, weaknesses, assumptions, trade-offs, and explicitly detail unresolved research gaps.
+6. **Academic Structure**:
+   - 1. Executive Summary
+   - 2. Review Methodology & Repository Scope
+   - 3. Thematic Literature Review (Organized by Themes)
+   - 4. Methodological & Empirical Comparison
+   - 5. Comparative Matrix Table (Markdown Table)
+   - 6. Critical Analysis & Unresolved Research Gaps
+   - 7. Future Research Directions
+   - 8. Conclusion
+   - 9. References & Bibliographic Catalog (With DOIs/ArXiv IDs)
+7. **Citations**: Include inline citations [C1], [C2] for every claim. Never hallucinate facts outside the provided sources.`;
 
     const fullReviewText = await callNemotronLlm({
-      systemInstruction: 'You are an expert AI Research Assistant & Literature Review Synthesizer powered by Nvidia Nemotron LLM.',
+      systemInstruction: 'You are an elite Senior AI Researcher & Academic Literature Review Synthesizer. You write publication-quality, thesis-grade systematic literature reviews.',
       prompt,
-      temperature: 0.25,
+      temperature: 0.2,
+      modelProvider,
     });
 
     res.json({

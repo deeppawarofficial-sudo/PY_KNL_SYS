@@ -29,8 +29,17 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`AI Knowledge Synthesizer Server listening on http://0.0.0.0:${PORT}`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`AI Knowledge Synthesizer Server listening on http://localhost:${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${PORT} is already in use. Kill the process on port ${PORT} or change PORT in .env.`);
+      process.exit(1);
+    } else {
+      console.error('❌ Server start error:', err);
+    }
   });
 }
 
