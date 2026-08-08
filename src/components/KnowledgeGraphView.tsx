@@ -17,7 +17,7 @@ export const KnowledgeGraphView: React.FC = () => {
 
   if (isLoading || !data) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-500 space-y-3 shadow-2xs">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-12 text-center text-slate-500 space-y-3 shadow-2xs">
         <RefreshCw className="w-6 h-6 animate-spin text-emerald-600 mx-auto" />
         <p className="text-xs font-mono">Loading Research Knowledge Graph Network...</p>
       </div>
@@ -27,13 +27,13 @@ export const KnowledgeGraphView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header - Geometric Balance */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Network className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Research Knowledge Graph & Concept Map</h2>
+            <h2 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Research Knowledge Graph & Concept Map</h2>
           </div>
           <p className="text-xs text-slate-500">
             Interactive network mapping dependencies between papers, vector indexing methodologies, and AI reasoning paradigms.
@@ -59,8 +59,8 @@ export const KnowledgeGraphView: React.FC = () => {
       {/* SVG Interactive Canvas + Inspector Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* SVG Graph Canvas (8 cols) */}
-        <div className="lg:col-span-8 bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-2xs min-h-[500px] flex items-center justify-center relative overflow-hidden">
-          <svg className="w-full h-[480px] text-slate-600 select-none">
+        <div className="lg:col-span-8 bg-slate-800/50 border border-slate-800 rounded-xl p-4 shadow-2xs min-h-[500px] flex items-center justify-center relative overflow-hidden">
+          <svg className="w-full h-[480px] text-slate-400 select-none">
             {/* Draw Links */}
             {data.links.map((link, idx) => {
               // Approximate positions in a grid / circle
@@ -147,12 +147,12 @@ export const KnowledgeGraphView: React.FC = () => {
         </div>
 
         {/* Node Inspector Drawer (4 cols) */}
-        <div className="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
-          <div className="border-b border-slate-200 pb-3 flex items-center gap-2">
+        <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
+          <div className="border-b border-slate-800 pb-3 flex items-center gap-2">
             <div className="w-6 h-6 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Sparkles className="w-3.5 h-3.5" />
             </div>
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Knowledge Node Inspector</h3>
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Knowledge Node Inspector</h3>
           </div>
 
           {selectedNode ? (
@@ -164,21 +164,21 @@ export const KnowledgeGraphView: React.FC = () => {
                 <span className="text-xs text-slate-500 font-mono">ID: {selectedNode.id}</span>
               </div>
 
-              <h4 className="text-base font-bold text-slate-900">
+              <h4 className="text-base font-bold text-slate-100">
                 {selectedNode.label}
               </h4>
 
-              <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <p className="text-xs text-slate-300 leading-relaxed bg-slate-800/50 p-3 rounded-lg border border-slate-800">
                 {selectedNode.description || 'No additional description registered.'}
               </p>
 
-              <div className="pt-2 border-t border-slate-200 text-xs text-slate-600 space-y-2">
-                <span className="font-bold text-slate-900">Connected Relationships:</span>
+              <div className="pt-2 border-t border-slate-800 text-xs text-slate-400 space-y-2">
+                <span className="font-bold text-slate-100">Connected Relationships:</span>
                 <div className="space-y-1">
                   {data.links
                     .filter((l) => l.source === selectedNode.id || l.target === selectedNode.id)
                     .map((l, i) => (
-                      <div key={i} className="bg-slate-50 p-2 rounded border border-slate-200 text-[11px] font-mono text-slate-700">
+                      <div key={i} className="bg-slate-800/50 p-2 rounded border border-slate-800 text-[11px] font-mono text-slate-300">
                         {l.source} ➔ <span className="text-emerald-600 font-bold">{l.relationship}</span> ➔ {l.target}
                       </div>
                     ))}

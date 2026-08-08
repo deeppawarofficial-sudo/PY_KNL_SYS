@@ -33,13 +33,13 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
   return (
     <div className="space-y-6">
       {/* Title Header - Geometric Balance */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Layers className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+            <h2 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
               Dynamic Methodological Comparative Matrix
             </h2>
           </div>
@@ -61,31 +61,31 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
       </div>
 
       {error && (
-        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2">
+        <div className="p-4 bg-rose-950/30 border border-rose-800/50 rounded-xl text-xs text-rose-400 flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Main Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-2xs overflow-hidden">
         {isLoading ? (
           <div className="p-16 text-center space-y-3">
             <RefreshCw className="w-8 h-8 animate-spin text-emerald-600 mx-auto" />
-            <p className="text-xs font-semibold text-slate-700">Synthesizing Comparative Matrix for {papers.length} Indexed Papers...</p>
+            <p className="text-xs font-semibold text-slate-300">Synthesizing Comparative Matrix for {papers.length} Indexed Papers...</p>
             <p className="text-[11px] text-slate-500">Extracting architectural trade-offs, indexing costs, and retrieval paradigms</p>
           </div>
         ) : matrixData.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <BookOpen className="w-8 h-8 text-slate-300 mx-auto" />
-            <p className="text-xs font-bold text-slate-700">No Indexed Papers for Matrix Evaluation</p>
+            <p className="text-xs font-bold text-slate-300">No Indexed Papers for Matrix Evaluation</p>
             <p className="text-xs text-slate-500">Import or upload papers to build a dynamic comparative matrix.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
+                <tr className="bg-slate-800/50 border-b border-slate-800 text-slate-300 font-bold uppercase tracking-wider text-[11px]">
                   <th className="p-4 w-48">Research Paradigm</th>
                   <th className="p-4 w-64">Core Architecture</th>
                   <th className="p-4 w-64">Primary Advantage</th>
@@ -94,14 +94,14 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
                   <th className="p-4 w-36">Query Latency</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-slate-800">
+              <tbody className="divide-y divide-slate-200 text-slate-200">
                 {matrixData.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                    <td className="p-4 font-bold text-emerald-700 bg-slate-50/50">
+                  <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
+                    <td className="p-4 font-bold text-emerald-700 bg-slate-800/50/50">
                       <div>{item.paradigm}</div>
                       <div className="text-[10px] text-slate-500 font-normal mt-1 leading-tight">{item.paper}</div>
                     </td>
-                    <td className="p-4 text-slate-800 leading-normal">
+                    <td className="p-4 text-slate-200 leading-normal">
                       {item.architecture}
                     </td>
                     <td className="p-4 text-emerald-800 leading-normal font-medium bg-emerald-50/60">
@@ -116,7 +116,7 @@ export const ComparisonMatrixView: React.FC<ComparisonMatrixViewProps> = ({ pape
                         <span>{item.mainLimitation}</span>
                       </div>
                     </td>
-                    <td className="p-4 font-mono text-slate-700">
+                    <td className="p-4 font-mono text-slate-300">
                       {item.indexingCost}
                     </td>
                     <td className="p-4 font-mono font-semibold text-emerald-700">

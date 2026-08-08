@@ -54,18 +54,18 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
   return (
     <div className="space-y-6">
       {/* Overview & Metadata Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xs">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 text-xs font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded">
               Synthesized across {result.papersUsedCount} Papers
             </span>
-            <span className="px-2 py-0.5 text-xs font-mono bg-slate-100 text-slate-700 rounded border border-slate-200 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-xs font-mono bg-slate-800 text-slate-300 rounded border border-slate-800 flex items-center gap-1">
               <Clock className="w-3 h-3 text-slate-500" />
               {result.executionTimeMs}ms execution
             </span>
           </div>
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-slate-100">
             Query: "{result.query}"
           </h2>
         </div>
@@ -81,7 +81,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
 
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-800 rounded-lg transition-colors cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5 text-slate-500" />
             <span>{copied ? 'Copied' : 'Copy Synthesis'}</span>
@@ -90,16 +90,16 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       </div>
 
       {/* Main Synthesized Content */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-2xs space-y-6">
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xs space-y-6">
+        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
           <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
             <Sparkles className="w-4 h-4" />
           </div>
-          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Multi-Paper Knowledge Synthesis</h3>
+          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Multi-Paper Knowledge Synthesis</h3>
         </div>
 
         {/* Markdown Rendered Answer */}
-        <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-sm space-y-4">
+        <div className="prose prose-slate max-w-none text-slate-200 leading-relaxed text-sm space-y-4">
           <div className="whitespace-pre-line">
             {renderFormattedAnswer(result.answer)}
           </div>
@@ -108,33 +108,33 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
 
       {/* Comparison Matrix Table if present */}
       {result.comparisonMatrix && (
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
             <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Layers className="w-4 h-4" />
             </div>
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Comparative Methodological Matrix</h3>
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Comparative Methodological Matrix</h3>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
+                <tr className="bg-slate-800/50 border-b border-slate-800 text-slate-300 font-bold uppercase tracking-wider text-[11px]">
                   <th className="p-3">Paper / Model</th>
                   {result.comparisonMatrix.dimensions.map((dim, idx) => (
                     <th key={idx} className="p-3">{dim}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-slate-800">
+              <tbody className="divide-y divide-slate-200 text-slate-200">
                 {result.comparisonMatrix.items.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                  <tr key={idx} className="hover:bg-slate-800/50 transition-colors">
                     <td className="p-3 font-semibold text-emerald-700">
                       <div>{item.paperTitle}</div>
                       <div className="text-[10px] text-slate-500 font-normal">({item.year}) - {item.authors[0]} et al.</div>
                     </td>
                     {result.comparisonMatrix!.dimensions.map((dim, dIdx) => (
-                      <td key={dIdx} className="p-3 text-slate-700 leading-normal">
+                      <td key={dIdx} className="p-3 text-slate-300 leading-normal">
                         {item.values[dim] || 'N/A'}
                       </td>
                     ))}
@@ -147,11 +147,11 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
       )}
 
       {/* Citations List & Vector Sources */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-emerald-600" />
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Indexed Citations & Evidence ({result.citations.length})</h3>
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Indexed Citations & Evidence ({result.citations.length})</h3>
           </div>
           <span className="text-xs text-slate-500 font-mono">Click citation to inspect chunk snippet</span>
         </div>
@@ -161,16 +161,16 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
             <div
               key={cite.citationId}
               onClick={() => onCitationClick(cite)}
-              className="group bg-slate-50 hover:bg-emerald-50/60 border border-slate-200 hover:border-emerald-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
+              className="group bg-slate-800/50 hover:bg-emerald-50/60 border border-slate-800 hover:border-emerald-300 p-3.5 rounded-lg transition-all cursor-pointer flex flex-col justify-between gap-2"
             >
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-emerald-700 bg-white border border-slate-200 rounded">
+                  <span className="px-1.5 py-0.5 text-xs font-mono font-bold text-emerald-700 bg-slate-900 border border-slate-800 rounded">
                     [{cite.citationId}]
                   </span>
                   <span className="text-[11px] text-slate-500 font-mono">Page {cite.pageNumber}</span>
                 </div>
-                <h4 className="text-xs font-semibold text-slate-900 group-hover:text-emerald-900 transition-colors line-clamp-1">
+                <h4 className="text-xs font-semibold text-slate-100 group-hover:text-emerald-900 transition-colors line-clamp-1">
                   {cite.paperTitle}
                 </h4>
                 <p className="text-[11px] text-slate-500">
@@ -178,7 +178,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
                 </p>
               </div>
 
-              <div className="bg-white p-2 rounded text-[11px] text-slate-700 italic line-clamp-2 border border-slate-200">
+              <div className="bg-slate-900 p-2 rounded text-[11px] text-slate-300 italic line-clamp-2 border border-slate-800">
                 "{cite.snippet}"
               </div>
             </div>

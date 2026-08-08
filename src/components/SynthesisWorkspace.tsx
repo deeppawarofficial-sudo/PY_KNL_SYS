@@ -97,13 +97,13 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
   return (
     <div className="space-y-6">
       {/* Search Input Box - Geometric Balance */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-2xs space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 font-bold">
               <Sparkles className="w-4 h-4" />
             </div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Multi-Paper Synthesis Query</h2>
+            <h2 className="text-sm font-bold text-slate-100 uppercase tracking-wide">Multi-Paper Synthesis Query</h2>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
             <span className="uppercase tracking-widest text-[10px] font-bold text-slate-400">Targeting:</span>
@@ -120,7 +120,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ask a complex multi-paper research question (e.g. 'Compare GraphRAG and Traditional RAG' or 'What are DeepSeek-R1 reasoning breakthroughs?')..."
             rows={3}
-            className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:bg-white rounded-xl p-3.5 pr-32 text-sm text-slate-900 placeholder-slate-400 outline-none resize-none transition-all font-sans"
+            className="w-full bg-slate-800/50 border border-slate-800 focus:border-emerald-600 focus:bg-slate-900 rounded-xl p-3.5 pr-32 text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition-all font-sans"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
@@ -131,7 +131,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
           <button
             onClick={() => handleRunSynthesis()}
             disabled={isLoading || !query.trim()}
-            className="absolute right-3 bottom-3.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:cursor-not-allowed"
+            className="absolute right-3 bottom-3.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:text-slate-400 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -161,7 +161,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
                   setQuery(preset.query);
                   handleRunSynthesis(preset.query);
                 }}
-                className="group flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-emerald-50/80 border border-slate-200 hover:border-emerald-300 rounded-lg text-xs text-slate-700 hover:text-emerald-900 transition-all text-left cursor-pointer"
+                className="group flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 hover:bg-emerald-50/80 border border-slate-800 hover:border-emerald-300 rounded-lg text-xs text-slate-300 hover:text-emerald-900 transition-all text-left cursor-pointer"
               >
                 <span className="font-bold text-emerald-600 group-hover:text-emerald-700">[{preset.tag}]</span>
                 <span>{preset.title}</span>
@@ -172,7 +172,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
         </div>
 
         {/* Advanced RAG Controls & Paper Selection Drawer */}
-        <div className="border-t border-slate-200 pt-3 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div className="border-t border-slate-800 pt-3 flex flex-wrap items-center justify-between gap-4 text-xs">
           {/* Sliders & Toggles */}
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
@@ -193,7 +193,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
               <select
                 value={topK}
                 onChange={(e) => setTopK(Number(e.target.value))}
-                className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-slate-800 font-mono text-xs outline-none focus:border-emerald-500"
+                className="bg-slate-800/50 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-xs outline-none focus:border-emerald-500"
               >
                 <option value={4}>4 Chunks</option>
                 <option value={6}>6 Chunks</option>
@@ -203,12 +203,12 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1.5 cursor-pointer text-slate-700 font-medium">
+              <label className="flex items-center gap-1.5 cursor-pointer text-slate-300 font-medium">
                 <input
                   type="checkbox"
                   checked={enableHybrid}
                   onChange={(e) => setEnableHybrid(e.target.checked)}
-                  className="rounded border-slate-300 text-emerald-600 focus:ring-0"
+                  className="rounded border-slate-700 text-emerald-600 focus:ring-0"
                 />
                 <span>Hybrid BM25 + Vector Search</span>
               </label>
@@ -241,7 +241,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
                 className={`px-2.5 py-1 text-[11px] rounded-md border font-medium transition-all flex items-center gap-1 cursor-pointer ${
                   isSelected
                     ? 'bg-emerald-50 text-emerald-800 border-emerald-300 font-semibold'
-                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-slate-300'
+                    : 'bg-slate-800/50 text-slate-400 border-slate-800 hover:border-slate-700'
                 }`}
               >
                 <span>{p.title.slice(0, 26)}...</span>
@@ -254,12 +254,12 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
 
       {/* Loading Banner */}
       {isLoading && (
-        <div className="bg-white border border-emerald-200 rounded-xl p-8 text-center space-y-4 shadow-2xs">
+        <div className="bg-slate-900 border border-emerald-200 rounded-xl p-8 text-center space-y-4 shadow-2xs">
           <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-emerald-600 shadow-2xs">
             <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-sm font-bold text-slate-900">{synthesisStep || 'Executing Multi-Paper RAG Pipeline...'}</h3>
+            <h3 className="text-sm font-bold text-slate-100">{synthesisStep || 'Executing Multi-Paper RAG Pipeline...'}</h3>
             <p className="text-xs text-slate-500 font-mono">
               Retrieving chunks from vector database &bull; Aligning citations &bull; Generating synthesis via Gemini 3.6 Flash
             </p>

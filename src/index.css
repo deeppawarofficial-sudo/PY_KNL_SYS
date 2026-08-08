@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* ── Scrollbar: dark thin style ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ── SpeedDial slide-in animation ── */
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+.animate-slide-in-up { animation: slideInUp 0.2s ease both; }
+
+/* ── Sidebar glow on active ── */
+.sidebar-active-glow { box-shadow: inset 2px 0 0 #34d399; }

@@ -33,11 +33,11 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-6 relative">
+      <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl max-w-md w-full p-6 space-y-6 relative">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-400 hover:bg-slate-800 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -48,13 +48,13 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             <RotateCcw className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900">Start New Research Session</h3>
+            <h3 className="text-base font-bold text-slate-100">Start New Research Session</h3>
             <p className="text-xs text-slate-500">Reset vector repository & start fresh</p>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center gap-2">
+          <div className="p-3 bg-rose-950/30 border border-rose-800/50 rounded-xl text-xs text-rose-400 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -62,7 +62,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
 
         {/* Option Selection */}
         <div className="space-y-3">
-          <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+          <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
             Select Session Baseline Mode:
           </label>
 
@@ -72,20 +72,20 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
               selectedMode === 'empty'
                 ? 'bg-emerald-50/80 border-emerald-600 shadow-2xs'
-                : 'bg-slate-50 hover:bg-slate-100/70 border-slate-200'
+                : 'bg-slate-800/50 hover:bg-slate-800/70 border-slate-800'
             }`}
           >
             <div className={`mt-0.5 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-              selectedMode === 'empty' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300'
+              selectedMode === 'empty' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-700'
             }`}>
               {selectedMode === 'empty' && <Check className="w-3 h-3 stroke-[3]" />}
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <Trash2 className="w-4 h-4 text-rose-600" />
-                <h4 className="text-xs font-bold text-slate-900">Start Fresh Empty Session</h4>
+                <h4 className="text-xs font-bold text-slate-100">Start Fresh Empty Session</h4>
               </div>
-              <p className="text-[11px] text-slate-600 leading-relaxed">
+              <p className="text-[11px] text-slate-400 leading-relaxed">
                 Clear all current {currentPaperCount} indexed research papers. Build your repository from scratch using ArXiv imports or custom PDF uploads.
               </p>
             </div>
@@ -97,20 +97,20 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
             className={`p-4 rounded-xl border transition-all cursor-pointer flex items-start gap-3.5 ${
               selectedMode === 'preset'
                 ? 'bg-emerald-50/80 border-emerald-600 shadow-2xs'
-                : 'bg-slate-50 hover:bg-slate-100/70 border-slate-200'
+                : 'bg-slate-800/50 hover:bg-slate-800/70 border-slate-800'
             }`}
           >
             <div className={`mt-0.5 w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-              selectedMode === 'preset' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300'
+              selectedMode === 'preset' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-700'
             }`}>
               {selectedMode === 'preset' && <Check className="w-3 h-3 stroke-[3]" />}
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-emerald-600" />
-                <h4 className="text-xs font-bold text-slate-900">Reset to Default Landmark Papers</h4>
+                <h4 className="text-xs font-bold text-slate-100">Reset to Default Landmark Papers</h4>
               </div>
-              <p className="text-[11px] text-slate-600 leading-relaxed">
+              <p className="text-[11px] text-slate-400 leading-relaxed">
                 Restore the default 8 pre-indexed benchmark AI papers (GraphRAG, DeepSeek-R1, Traditional RAG, Chain-of-Thought, etc.).
               </p>
             </div>
@@ -122,7 +122,7 @@ export const NewSessionModal: React.FC<NewSessionModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             Cancel
           </button>

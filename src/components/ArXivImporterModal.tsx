@@ -165,7 +165,7 @@ export const ArXivImporterModal: React.FC<ArXivImporterModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-4 max-h-[60vh]">
           {results.length === 0 ? (
             <div className="text-center py-12 text-slate-400 space-y-2">
-              <BookOpen className="w-8 h-8 text-slate-600 mx-auto" />
+              <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
               <p className="text-xs">
                 {source === 'semanticscholar'
                   ? 'Search Semantic Scholar using natural research topics to find and chunk top relevant papers.'
