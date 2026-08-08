@@ -63,7 +63,7 @@ export default function App() {
 
   const speedDialActions = [
     {
-      icon: Upload, label: 'Upload PDF', colorClass: 'bg-emerald-600 hover:bg-emerald-500',
+      icon: Upload, label: 'Upload PDF', colorClass: 'bg-cyan-600 hover:bg-cyan-500',
       action: () => { setShowUploadModal(true); setSpeedDialOpen(false); },
     },
     {
@@ -81,7 +81,7 @@ export default function App() {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 text-slate-100 font-sans antialiased overflow-hidden selection:bg-emerald-600 selection:text-white">
+    <div className="flex flex-col h-screen bg-slate-950 text-slate-100 font-sans antialiased overflow-hidden selection:bg-cyan-600 selection:text-white">
 
       {/* ── Slim Top Bar ── */}
       <Header
@@ -110,13 +110,13 @@ export default function App() {
                 title={label}
                 className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer overflow-hidden ${
                   activeTab === id
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
                     : 'text-slate-500 hover:bg-slate-800 hover:text-slate-200 border border-transparent'
                 }`}
               >
                 {/* Active indicator bar */}
                 {activeTab === id && (
-                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-emerald-400 rounded-r-full" />
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-cyan-400 rounded-r-full" />
                 )}
                 <Icon className="w-4 h-4 flex-shrink-0" />
                 <span
@@ -126,7 +126,7 @@ export default function App() {
                 >
                   {label}
                   {id === 'library' && papers.length > 0 && (
-                    <span className="ml-2 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[10px] font-mono">
+                    <span className="ml-2 px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 rounded text-[10px] font-mono">
                       {papers.length}
                     </span>
                   )}
@@ -142,7 +142,7 @@ export default function App() {
               title="Quick Chat"
               className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer overflow-hidden border ${
                 isFloatingChatOpen
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
                   : 'text-slate-500 hover:bg-slate-800 hover:text-slate-200 border-transparent'
               }`}
             >
@@ -155,7 +155,7 @@ export default function App() {
                 Quick Chat
               </span>
               {isFloatingChatOpen && (
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
               )}
             </button>
           </div>
@@ -166,7 +166,7 @@ export default function App() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
             {isLoadingPapers ? (
               <div className="py-24 text-center space-y-4 bg-slate-900 rounded-2xl border border-slate-800 max-w-xl mx-auto mt-12">
-                <div className="w-10 h-10 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                <div className="w-10 h-10 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto" />
                 <div>
                   <p className="text-sm font-bold text-slate-200">Initializing Vector Store</p>
                   <p className="text-xs text-slate-500 font-mono mt-1">Loading Qdrant Collection &amp; Research Papers...</p>
@@ -215,8 +215,8 @@ export default function App() {
       {/* 1. Live Stats Widget — bottom-left */}
       <div className="fixed bottom-6 left-20 z-40">
         <div className="flex items-center gap-2.5 bg-slate-900/80 backdrop-blur-md border border-slate-700/60 rounded-full px-4 py-2 shadow-xl shadow-black/50 text-xs font-mono select-none">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
-          <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Qdrant Live</span>
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0" />
+          <span className="text-cyan-400 font-bold uppercase tracking-wider text-[10px]">Qdrant Live</span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-300">
             <span className="text-white font-bold">{totalChunks}</span>
@@ -262,7 +262,7 @@ export default function App() {
         {/* Main FAB trigger */}
         <button
           onClick={() => setSpeedDialOpen(!speedDialOpen)}
-          className="w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-950/60 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer border border-emerald-500/30"
+          className="w-14 h-14 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-950/60 flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer border border-cyan-500/30"
         >
           <Plus
             className={`w-6 h-6 transition-transform duration-300 ${speedDialOpen ? 'rotate-45' : 'rotate-0'}`}

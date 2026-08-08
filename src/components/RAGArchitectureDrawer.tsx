@@ -13,8 +13,8 @@ export const RAGArchitectureDrawer: React.FC<RAGArchitectureDrawerProps> = ({ on
       subtitle: 'ArXiv API / PDF Loader',
       description: 'Fetches PDFs & papers via ArXiv API or custom uploads with metadata extraction.',
       icon: FileText,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-950/80 border-emerald-800',
+      color: 'text-cyan-400',
+      bg: 'bg-cyan-950/80 border-cyan-800',
     },
     {
       step: '02',
@@ -31,8 +31,8 @@ export const RAGArchitectureDrawer: React.FC<RAGArchitectureDrawerProps> = ({ on
       subtitle: 'Qdrant Collection Indexing',
       description: 'Computes high-dimensional term vectors and indexes into Qdrant HNSW graph collections.',
       icon: Database,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-950/80 border-emerald-800',
+      color: 'text-cyan-400',
+      bg: 'bg-cyan-950/80 border-cyan-800',
     },
     {
       step: '04',
@@ -69,7 +69,7 @@ export const RAGArchitectureDrawer: React.FC<RAGArchitectureDrawerProps> = ({ on
         {/* Header */}
         <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-emerald-400" />
+            <Cpu className="w-5 h-5 text-cyan-400" />
             <h3 className="text-sm font-bold text-slate-100">AI Knowledge Synthesizer System Architecture</h3>
           </div>
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-100">
@@ -109,9 +109,9 @@ export const RAGArchitectureDrawer: React.FC<RAGArchitectureDrawerProps> = ({ on
           </div>
 
           {/* Verification Badge */}
-          <div className="bg-emerald-950/40 border border-emerald-900/60 rounded-xl p-4 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-emerald-300">
-              <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+          <div className="bg-cyan-950/40 border border-cyan-900/60 rounded-xl p-4 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 text-cyan-300">
+              <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0" />
               <span>Full-Stack RAG Execution Verified &bull; Zero Client API Key Exposure</span>
             </div>
             <span className="font-mono text-slate-400">Port 3000 Container Ingress</span>
@@ -122,7 +122,7 @@ export const RAGArchitectureDrawer: React.FC<RAGArchitectureDrawerProps> = ({ on
         <div className="bg-slate-950 px-6 py-3 border-t border-slate-800 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs rounded-lg transition-colors"
+            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs rounded-lg transition-colors"
           >
             Close Architecture Map
           </button>

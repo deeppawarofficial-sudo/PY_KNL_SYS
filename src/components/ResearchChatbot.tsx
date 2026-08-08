@@ -166,7 +166,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
         {msg.citations && msg.citations.length > 0 && (
           <div className="mt-3 pt-3 border-t border-slate-800/80 bg-slate-800/50/80 -mx-1 px-3 py-2.5 rounded-lg">
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
-              <Quote className="w-3.5 h-3.5 text-emerald-600" />
+              <Quote className="w-3.5 h-3.5 text-cyan-600" />
               <span>Grounded Evidence ({msg.citations.length} Citations)</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -177,10 +177,10 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                     if (onSelectCitation) onSelectCitation(cite);
                     setActiveCitationPreview(cite);
                   }}
-                  className="group flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-slate-900 text-emerald-700 hover:bg-emerald-50 border border-slate-800 hover:border-emerald-300 rounded-md shadow-2xs transition-all text-left"
+                  className="group flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-slate-900 text-cyan-700 hover:bg-cyan-50 border border-slate-800 hover:border-cyan-300 rounded-md shadow-2xs transition-all text-left"
                 >
-                  <span className="font-mono font-bold text-emerald-600">[{cite.citationId}]</span>
-                  <span className="truncate max-w-[180px] text-slate-300 group-hover:text-emerald-900">
+                  <span className="font-mono font-bold text-cyan-600">[{cite.citationId}]</span>
+                  <span className="truncate max-w-[180px] text-slate-300 group-hover:text-cyan-900">
                     {cite.paperTitle}
                   </span>
                   <span className="text-[10px] text-slate-400">p.{cite.pageNumber}</span>
@@ -204,13 +204,13 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {/* Top Header - Geometric Balance Style */}
       <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-white shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold shadow-xs">
-            <Bot className="w-4 h-4 text-emerald-100" />
+          <div className="w-8 h-8 rounded-md bg-cyan-600 flex items-center justify-center text-white font-bold shadow-xs">
+            <Bot className="w-4 h-4 text-cyan-100" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold tracking-tight text-white">Research Paper Chatbot</h3>
-              <span className="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded">
+              <span className="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded">
                 RAG Active
               </span>
             </div>
@@ -240,7 +240,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {/* Scope Filter Bar */}
       <div className="bg-slate-800/50 px-4 py-2 border-b border-slate-800 flex items-center justify-between gap-2 shrink-0 text-xs">
         <div className="flex items-center gap-2 text-slate-400 font-medium">
-          <BookOpen className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <BookOpen className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
           <span className="uppercase tracking-widest text-[10px] font-bold text-slate-400">
             Scope:
           </span>
@@ -254,7 +254,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
               setActiveScopePaperId(val);
               if (onSelectPaperId) onSelectPaperId(val);
             }}
-            className="w-full bg-slate-900 text-slate-200 border border-slate-800 rounded-md py-1 px-2 pr-6 text-xs font-medium focus:outline-none focus:border-emerald-500 truncate appearance-none cursor-pointer shadow-2xs"
+            className="w-full bg-slate-900 text-slate-200 border border-slate-800 rounded-md py-1 px-2 pr-6 text-xs font-medium focus:outline-none focus:border-cyan-500 truncate appearance-none cursor-pointer shadow-2xs"
           >
             <option value="">🌐 Entire Repository ({papers.length} Papers)</option>
             {papers.map((p) => (
@@ -281,13 +281,13 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
               className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-xs font-bold ${
                 msg.role === 'user'
                   ? 'bg-slate-800 text-slate-100'
-                  : 'bg-emerald-600 text-white shadow-2xs'
+                  : 'bg-cyan-600 text-white shadow-2xs'
               }`}
             >
               {msg.role === 'user' ? (
                 <User className="w-3.5 h-3.5" />
               ) : (
-                <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+                <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
               )}
             </div>
 
@@ -295,14 +295,14 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
             <div
               className={`relative max-w-[85%] rounded-xl p-3.5 border shadow-2xs ${
                 msg.role === 'user'
-                  ? 'bg-emerald-600 text-white border-emerald-700'
+                  ? 'bg-cyan-600 text-white border-cyan-700'
                   : 'bg-slate-900 text-slate-200 border-slate-800'
               }`}
             >
               {/* Top Meta info */}
               <div
                 className={`flex items-center justify-between gap-4 mb-1.5 text-[10px] font-mono ${
-                  msg.role === 'user' ? 'text-emerald-200' : 'text-slate-400'
+                  msg.role === 'user' ? 'text-cyan-200' : 'text-slate-400'
                 }`}
               >
                 <span className="font-bold">
@@ -328,7 +328,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                   className="absolute top-2 right-2 p-1 text-slate-300 hover:text-slate-400 rounded transition-colors"
                 >
                   {copiedId === msg.id ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <Check className="w-3.5 h-3.5 text-cyan-600" />
                   ) : (
                     <Copy className="w-3.5 h-3.5" />
                   )}
@@ -341,11 +341,11 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
         {/* Loading Spinner Indicator */}
         {isLoading && (
           <div className="flex items-start gap-3">
-            <div className="w-7 h-7 rounded-md bg-emerald-600 text-white flex items-center justify-center shrink-0">
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-200" />
+            <div className="w-7 h-7 rounded-md bg-cyan-600 text-white flex items-center justify-center shrink-0">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-200" />
             </div>
             <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-slate-400 text-xs flex items-center gap-2 shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 text-cyan-600 animate-pulse" />
               <span>Retrieving vector chunks and synthesizing answer...</span>
             </div>
           </div>
@@ -358,7 +358,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
       {messages.length < 5 && (
         <div className="bg-slate-900 border-t border-slate-800 p-2.5 shrink-0">
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 px-1 flex items-center gap-1">
-            <Info className="w-3 h-3 text-emerald-500" />
+            <Info className="w-3 h-3 text-cyan-500" />
             <span>Suggested Research Questions</span>
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto">
@@ -367,7 +367,7 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                 key={idx}
                 onClick={() => handleSend(q)}
                 disabled={isLoading}
-                className="text-left text-[11px] bg-slate-800/50 hover:bg-emerald-50 text-slate-300 hover:text-emerald-800 border border-slate-800 hover:border-emerald-300 px-2.5 py-1 rounded-md transition-colors truncate max-w-full"
+                className="text-left text-[11px] bg-slate-800/50 hover:bg-cyan-50 text-slate-300 hover:text-cyan-800 border border-slate-800 hover:border-cyan-300 px-2.5 py-1 rounded-md transition-colors truncate max-w-full"
               >
                 {q}
               </button>
@@ -395,13 +395,13 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
                 : 'Ask a research question across all indexed papers...'
             }
             disabled={isLoading}
-            className="flex-1 bg-slate-800/50 text-slate-100 text-xs sm:text-sm border border-slate-800 rounded-lg px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-slate-900 transition-all placeholder:text-slate-400"
+            className="flex-1 bg-slate-800/50 text-slate-100 text-xs sm:text-sm border border-slate-800 rounded-lg px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-slate-900 transition-all placeholder:text-slate-400"
           />
 
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:text-slate-400 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer disabled:cursor-not-allowed"
+            className="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-700 disabled:text-slate-400 text-white font-medium text-xs rounded-lg flex items-center gap-1.5 transition-all shadow-2xs shrink-0 cursor-pointer disabled:cursor-not-allowed"
           >
             <span>Ask</span>
             <Send className="w-3.5 h-3.5" />
@@ -411,22 +411,22 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
 
       {/* Inline Citation Quick Preview Drawer */}
       {activeCitationPreview && (
-        <div className="bg-emerald-950 text-emerald-100 p-3 border-t border-emerald-900 text-xs shrink-0 animate-in slide-in-from-bottom">
+        <div className="bg-cyan-950 text-cyan-100 p-3 border-t border-cyan-900 text-xs shrink-0 animate-in slide-in-from-bottom">
           <div className="flex items-center justify-between mb-1">
-            <span className="font-bold text-emerald-300 font-mono">
+            <span className="font-bold text-cyan-300 font-mono">
               [{activeCitationPreview.citationId}] {activeCitationPreview.paperTitle} ({activeCitationPreview.year})
             </span>
             <button
               onClick={() => setActiveCitationPreview(null)}
-              className="text-emerald-400 hover:text-white font-mono text-xs font-bold"
+              className="text-cyan-400 hover:text-white font-mono text-xs font-bold"
             >
               ✕
             </button>
           </div>
-          <p className="text-[11px] text-emerald-200 line-clamp-2 italic bg-emerald-900/60 p-2 rounded border border-emerald-800">
+          <p className="text-[11px] text-cyan-200 line-clamp-2 italic bg-cyan-900/60 p-2 rounded border border-cyan-800">
             "{activeCitationPreview.snippet}"
           </p>
-          <div className="mt-1 flex items-center justify-between text-[10px] text-emerald-400 font-mono">
+          <div className="mt-1 flex items-center justify-between text-[10px] text-cyan-400 font-mono">
             <span>Section: {activeCitationPreview.sectionName}</span>
             <span>Page {activeCitationPreview.pageNumber}</span>
           </div>

@@ -204,7 +204,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
         {/* Header */}
         <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-emerald-400" />
+            <Layers className="w-5 h-5 text-cyan-400" />
             <h3 className="text-sm font-bold text-slate-100">Batch Multi-Paper Local Importer</h3>
           </div>
           <button
@@ -223,7 +223,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
               onClick={() => setActiveTab('batch')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'batch'
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-cyan-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -235,7 +235,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
               onClick={() => setActiveTab('manual')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'manual'
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-cyan-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -273,7 +273,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
                   isDragOver
-                    ? 'border-emerald-400 bg-emerald-950/30'
+                    ? 'border-cyan-400 bg-cyan-950/30'
                     : 'border-slate-700 bg-slate-950/60 hover:border-slate-500 hover:bg-slate-950'
                 }`}
               >
@@ -285,7 +285,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                   className="hidden"
                   onChange={(e) => e.target.files && handleFilesAdded(e.target.files)}
                 />
-                <Upload className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
+                <Upload className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
                 <p className="text-xs font-bold text-slate-200">
                   Click to choose or drag & drop multiple research paper files
                 </p>
@@ -311,7 +311,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                       <option value="Vector Databases & Indexing">Vector Databases & Indexing</option>
                     </select>
                   </div>
-                  <span className="text-emerald-400 font-mono font-bold">{queuedFiles.length} Papers Selected</span>
+                  <span className="text-cyan-400 font-mono font-bold">{queuedFiles.length} Papers Selected</span>
                 </div>
               )}
 
@@ -325,13 +325,13 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
+                          <FileText className="w-4 h-4 text-cyan-400 shrink-0" />
                           <input
                             type="text"
                             value={item.title}
                             onChange={(e) => updateQueuedFile(item.id, { title: e.target.value })}
                             placeholder="Paper Title..."
-                            className="bg-slate-900 border border-slate-700 focus:border-emerald-500 text-slate-100 font-semibold text-xs rounded-lg px-2.5 py-1 w-full outline-none"
+                            className="bg-slate-900 border border-slate-700 focus:border-cyan-500 text-slate-100 font-semibold text-xs rounded-lg px-2.5 py-1 w-full outline-none"
                           />
                         </div>
 
@@ -341,14 +341,14 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                           </span>
 
                           {item.status === 'completed' && (
-                            <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 rounded flex items-center gap-1">
-                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                            <span className="px-2 py-0.5 text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 rounded flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-cyan-400" />
                               Indexed
                             </span>
                           )}
 
                           {item.status === 'uploading' && (
-                            <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 rounded flex items-center gap-1">
+                            <span className="px-2 py-0.5 text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-800 rounded flex items-center gap-1">
                               <RefreshCw className="w-3 h-3 animate-spin" />
                               Indexing...
                             </span>
@@ -397,7 +397,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                   value={manualTitle}
                   onChange={(e) => setManualTitle(e.target.value)}
                   placeholder="e.g. Scaling Laws for Neural Language Models"
-                  className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none"
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none"
                   required
                 />
               </div>
@@ -410,7 +410,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                     value={manualAuthors}
                     onChange={(e) => setManualAuthors(e.target.value)}
                     placeholder="e.g. Jared Kaplan, Sam McCandlish"
-                    className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none"
+                    className="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none"
                   />
                 </div>
 
@@ -419,7 +419,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                   <select
                     value={manualCategory}
                     onChange={(e) => setManualCategory(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none cursor-pointer"
+                    className="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-100 outline-none cursor-pointer"
                   >
                     <option value="Custom Uploads">Custom Uploads</option>
                     <option value="RAG & Retrieval Systems">RAG & Retrieval Systems</option>
@@ -437,7 +437,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                   onChange={(e) => setManualText(e.target.value)}
                   placeholder="Paste full text or excerpts of the research paper here..."
                   rows={8}
-                  className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-lg p-3 text-xs text-slate-100 font-mono outline-none resize-none"
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-lg p-3 text-xs text-slate-100 font-mono outline-none resize-none"
                   required
                 />
               </div>
@@ -451,13 +451,13 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
             <div className="flex-1 w-full space-y-1.5">
               <div className="flex items-center justify-between text-[11px] text-slate-300">
                 <span>Processing paper {batchProgress.current} of {batchProgress.total}...</span>
-                <span className="font-mono text-emerald-400 font-bold truncate max-w-[200px]">
+                <span className="font-mono text-cyan-400 font-bold truncate max-w-[200px]">
                   {batchProgress.currentName}
                 </span>
               </div>
               <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-emerald-500 transition-all duration-300"
+                  className="h-full bg-cyan-500 transition-all duration-300"
                   style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}
                 />
               </div>
@@ -484,7 +484,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                 type="button"
                 onClick={handleBatchUploadSubmit}
                 disabled={isUploading || queuedFiles.length === 0}
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold rounded-lg flex items-center gap-1.5 shadow-md shadow-emerald-950 cursor-pointer"
+                className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-semibold rounded-lg flex items-center gap-1.5 shadow-md shadow-cyan-950 cursor-pointer"
               >
                 {isUploading ? (
                   <>
@@ -503,7 +503,7 @@ export const PaperUploadModal: React.FC<PaperUploadModalProps> = ({
                 type="button"
                 onClick={handleManualSubmit}
                 disabled={isUploading}
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold rounded-lg flex items-center gap-1.5 shadow-md shadow-emerald-950 cursor-pointer"
+                className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-semibold rounded-lg flex items-center gap-1.5 shadow-md shadow-cyan-950 cursor-pointer"
               >
                 {isUploading ? (
                   <>
