@@ -1,16 +1,28 @@
-import os
-from services.nemotron_llm import generate_nemotron_response
+"""
+literature_review.py
+--------------------
+Literature Review chain using LangChain Expression Language (LCEL).
 
-async def run_literature_review(paper_count: int, catalog_str: str, context_str: str) -> str:
-    """
-    Synthesizes a comprehensive Literature Review across all indexed papers using Nvidia Nemotron LLM.
-    """
-    system_prompt = (
-        "You are an expert AI Research Synthesizer utilizing Nvidia Nemotron LLM. "
-        "Generate a unified, single-document Literature Review report analyzing ALL indexed papers."
-    )
+Chain structure:
+    prompt_template | nemotron_llm | StrOutputParser()
+"""
 
-    prompt = f"""Generate a comprehensive scientific Literature Review covering ALL {paper_count} research papers currently indexed in our repository.
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+from services.nemotron_langchain import NemotronLangChain
+
+# ---------------------------------------------------------------------------
+# 1. Prompt template
+#    {paper_count}, {catalog_str}, and {context_str} are filled at invoke time.
+# ---------------------------------------------------------------------------
+_SYSTEM = (
+    "You are an expert AI Research Synthesizer utilizing Nvidia Nemotron LLM. "
+    "Generate a unified, single-document Literature Review report analyzing ALL indexed papers."
+)
+
+_HUMAN = """\
+Generate a comprehensive scientific Literature Review covering ALL {paper_count} research papers currently indexed in our repository.
 
 INDEXED PAPERS CATALOG ({paper_count} PAPERS):
 {catalog_str}
@@ -31,10 +43,39 @@ CRITICAL REQUIREMENTS:
 
 LITERATURE REVIEW:"""
 
-    response = await generate_nemotron_response(
-        prompt=prompt,
-        system_prompt=system_prompt,
-        temperature=0.25,
-        max_tokens=3000
-    )
-    return response
+literature_review_prompt = ChatPromptTemplate.from_messages([
+    ("system", _SYSTEM),
+    ("human", _HUMAN),
+])
+
+# ---------------------------------------------------------------------------
+# 2. LLM
+# ---------------------------------------------------------------------------
+literature_review_llm = NemotronLangChain(temperature=0.25, max_tokens=3000)
+
+# ---------------------------------------------------------------------------
+# 3. Output parser
+# ---------------------------------------------------------------------------
+_output_parser = StrOutputParser()
+
+# ---------------------------------------------------------------------------
+# 4. LCEL chain — prompt | llm | parser
+# ---------------------------------------------------------------------------
+literature_review_chain = literature_review_prompt | literature_review_llm | _output_parser
+
+
+# ---------------------------------------------------------------------------
+# Public API — same signature as before so the router needs no changes.
+# ---------------------------------------------------------------------------
+async def run_literature_review(paper_count: int, catalog_str: str, context_str: str) -> str:
+    """
+    Synthesizes a comprehensive Literature Review using the LCEL chain.
+
+    Equivalent to the old manual call but now uses the | pipe operator:
+        literature_review_chain = prompt | llm | parser
+    """
+    return await literature_review_chain.ainvoke({
+        "paper_count": paper_count,
+        "catalog_str": catalog_str,
+        "context_str": context_str,
+    })
