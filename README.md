@@ -33,6 +33,8 @@ The platform enables researchers and developers to query across multiple indexed
 
 ## 🔄 End-to-End System Data Flow Pipeline
 
+![System Architecture Diagram](assets/architecture_diagram.png)
+
 ```mermaid
 flowchart TD
     A["Input & Ingestion Layer"] -->|"ArXiv API / PDF Upload"| B["Text Parsing & Recursive Chunking"]
