@@ -15,6 +15,12 @@ The platform enables researchers and developers to query across multiple indexed
 
 ---
 
+## 🏗️ System Architecture
+
+![System Architecture Diagram](assets/architecture_diagram.png)
+
+---
+
 ## 🖼️ Application Screenshots
 
 ### 1. Multi-Paper RAG Synthesis Workspace
@@ -32,8 +38,6 @@ The platform enables researchers and developers to query across multiple indexed
 ---
 
 ## 🔄 End-to-End System Data Flow Pipeline
-
-![System Architecture Diagram](assets/architecture_diagram.png)
 
 ```mermaid
 flowchart TD
