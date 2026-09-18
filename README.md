@@ -4,14 +4,15 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Python_3.10+-009688?style=flat-square&logo=fastapi)
 ![Express](https://img.shields.io/badge/Express-Node.js-000000?style=flat-square&logo=express)
-![Qdrant](https://img.shields.io/badge/Qdrant-Vector_DB-red?style=flat-square)
+![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph_CRAG-orange?style=flat-square)
+![Qdrant](https://img.shields.io/badge/Qdrant-Cloud_Vector_DB-red?style=flat-square)
 ![Embeddings](https://img.shields.io/badge/Embeddings-BAAI%2Fbge--large--en--v1.5_1024D-purple?style=flat-square)
-![LLM Engine](https://img.shields.io/badge/LLM-Groq_%2F_Nvidia_Nemotron_70B-green?style=flat-square)
+![LLM Engine](https://img.shields.io/badge/LLM-Groq_(gpt--oss--120b_+_20b)-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-A full-stack, production-grade research paper knowledge synthesis engine powered by **Python (FastAPI + Hugging Face)**, **Node.js Express**, **Groq (llama-3.3-70b-versatile) / Nvidia Nemotron 70B**, **BAAI/bge-large-en-v1.5 1024-dim Vector Embeddings**, **Qdrant Vector Database**, and a **React 19 (TypeScript + Vite 6 + Tailwind CSS v4)** frontend.
+A full-stack, production-grade research paper knowledge synthesis engine powered by **LangGraph Corrective RAG (CRAG)**, **Python (FastAPI + LangChain)**, **Node.js Express**, **Groq Cloud (`openai/gpt-oss-120b` + `openai/gpt-oss-20b`)**, **BAAI/bge-large-en-v1.5 1024-dim Vector Embeddings**, **Qdrant Vector Database**, and a **React 19 (TypeScript + Vite 6 + Tailwind CSS v4)** frontend.
 
-The platform enables researchers and developers to query across multiple indexed AI manuscripts, execute dense vector retrieval using **BAAI/bge-large-en-v1.5** embeddings and hybrid cosine + BM25 similarity search, generate multi-paper synthesis reports with verifiable inline citations `[C1]`, `[C2]`, produce publication-ready literature reviews, interact with an AI research chatbot, and explore comparative methodological matrices & dynamic knowledge graph networks.
+The platform enables researchers and developers to query across multiple indexed AI manuscripts, execute dense vector retrieval using **BAAI/bge-large-en-v1.5** embeddings and hybrid cosine + BM25 similarity search, run self-corrective relevance grading and query rewriting via **LangGraph**, generate multi-paper synthesis reports with verifiable inline citations `[C1]`, `[C2]`, produce publication-ready literature reviews, interact with an AI research chatbot, and explore comparative methodological matrices & dynamic knowledge graph networks.
 
 ---
 
@@ -42,16 +43,28 @@ The platform enables researchers and developers to query across multiple indexed
 ```mermaid
 flowchart TD
     A["Input & Ingestion Layer"] -->|"ArXiv API / PDF Upload"| B["Text Parsing & Recursive Chunking"]
-    B -->|"700-char chunks + 100 overlap"| C["Vector Embedding & Storage"]
-    C -->|"BAAI/bge-large-en-v1.5 1024-dim"| D["Qdrant HNSW Vector DB"]
+    B -->|"700-char chunks + 100 overlap"| C["Vector Embedding Engine"]
+    C -->|"BAAI/bge-large-en-v1.5 1024-dim"| D["Qdrant Cloud HNSW Vector DB"]
+
+    E(["User Research Query"]) --> N1["Node 1: retrieve_node<br/>Hybrid Cosine + BM25 Search"]
+    D <-->|"Dense + Sparse Match"| N1
+
+    N1 --> N2["Node 2: grade_documents_node<br/>Groq gpt-oss-20b Batch Relevance Filter"]
+
+    N2 --> C1{"Conditional Edge:<br/>Are relevant docs found?"}
+
+    C1 -- ">= 1 Relevant Chunks" --> N4["Node 4: synthesize_answer_node<br/>Groq gpt-oss-120b Deep Synthesis"]
     
-    E["User Research Query"] -->|"Synthesizer / Chat / Review / Matrix"| F["Hybrid Sparse-Dense Retriever"]
-    D -->|"Cosine Similarity + BM25 RRF"| F
-    
-    F -->|"Top-K Chunks + Citations C1, C2"| G["Prompt Engineering & Reasoning Chains"]
-    G -->|"Grounded Context Prompt"| H["LLM Inference: Groq llama-3.3-70b / Nemotron 70B"]
-    
-    H -->|"Markdown + Citation Evidence + JSON Matrix"| I["React 19 Frontend UI Output"]
+    C1 -- "0 Relevant & retry < 2" --> N3["Node 3: rewrite_query_node<br/>Reformulates Academic Terminology"]
+    N3 --> N1
+
+    C1 -- "0 Relevant & retry >= 2" --> N5["Node 5: arxiv_fallback_search_node<br/>Queries Live ArXiv & Ingests to Qdrant"]
+    N5 --> N4
+
+    N4 --> C2{"Conditional Edge:<br/>Grounding & Hallucination Gate"}
+    C2 -- "Grounded & Complete" --> OUT(["React 19 UI: Synthesis + Decision Trace + Citations"])
+    C2 -- "Ungrounded & retry < 2" --> N6["Node 6: resynthesize_node<br/>Strict Grounding Constraint"]
+    N6 --> OUT
 ```
 
 ### Pipeline Step Breakdown:
@@ -65,27 +78,30 @@ flowchart TD
    - **Chunk Size**: 700 characters | **Chunk Overlap**: 100 characters *(ensures context continuity)*.
    - **Metadata Payload**: Each chunk is attached to JSON metadata: `paperId`, `paperTitle`, `authors`, `year`, `sectionName`, `chunkIndex`, `pageNumber`.
 
-3. **BAAI/bge-large-en-v1.5 Embeddings & Qdrant Storage**:
+3. **BAAI/bge-large-en-v1.5 Embeddings & Qdrant Cloud Storage**:
    - **Dense Embeddings**: Generates **1024-dimensional dense float vector embeddings** using Hugging Face model `BAAI/bge-large-en-v1.5`.
-   - **Qdrant Vector Database**: Stores vector points inside Qdrant HNSW Graph Index (`Distance.COSINE`).
+   - **Qdrant Vector Database**: Stores vector points inside Qdrant HNSW Graph Index (`Distance.COSINE`) hosted on AWS cloud.
 
-4. **Hybrid Sparse-Dense Retrieval Engine (Cosine + BM25)**:
+4. **Hybrid Sparse-Dense Retrieval (Cosine + BM25)**:
    - Combines 1024-dim dense vector cosine similarity with BM25 term-frequency keyword matching:
      $$\text{Hybrid Score} = 0.65 \times \text{CosineSimilarity}(\vec{q}, \vec{d}) + 0.35 \times \text{BM25Score}(q, d)$$
-   - Maps top-K chunks into evidence blocks tagged with verifiable inline citations `[C1]`, `[C2]`, `[C3]`.
+   - Maps candidate chunks into evidence blocks tagged with verifiable inline citations `[C1]`, `[C2]`, `[C3]`.
 
-5. **LLM Inference & Reasoning Chains**:
-   - **Groq API** (Primary): `llama-3.3-70b-versatile` via Groq Cloud API with 25s timeout & automatic model fallback.
-   - **HG Nemotron** (Secondary): `nvidia/Llama-3.1-Nemotron-70B-Instruct-HF` via Hugging Face Router API.
-   - **Offline Fallback Engine**: Built-in 0ms local RAG reasoning engine grounded in exact paper paragraphs.
+5. **LangGraph Corrective RAG (CRAG) Orchestration**:
+   - **Document Relevance Grader (`openai/gpt-oss-20b`)**: Evaluates retrieved chunks in batch to eliminate off-topic noise before generation.
+   - **Query Reformulation Loop**: If no relevant chunks are found, reformulates the search terms into academic keywords and retries retrieval.
+   - **Live ArXiv Fallback**: If local papers lack coverage, queries ArXiv API, auto-ingests new papers into Qdrant Cloud, and continues execution.
+   - **Deep Academic Synthesis (`openai/gpt-oss-120b`)**: Synthesizes structured research markdown with verifiable inline citations.
+   - **Grounding & Hallucination Check**: Evaluates entailment against source excerpts; regenerates with strict constraints if unsupported claims occur.
 
-6. **React 19 Frontend UI**:
-   - Dark sidebar navigation layout with collapsible icon-only → icon+label hover expansion.
+6. **React 19 Frontend UI & Decision Trace**:
+   - **Interactive LangGraph Decision Trace**: Collapsible UI widget visualizing step-by-step nodes executed (`[Retrieve]`, `[Grade]`, `[Rewrite]`, `[ArXiv Fallback]`, `[Synthesize]`).
    - Renders Markdown synthesis with clickable inline citations `[C1]` that trigger the **Citation Modal**.
    - **Floating SpeedDial FAB** (bottom-right) for Upload PDF, ArXiv Fetch, Literature Review, New Session.
    - **Floating Live Stats Widget** (bottom-left) showing live Qdrant chunk & paper count.
    - Dynamic SVG Knowledge Graph networks mapped to active session papers.
    - Client-side PDF report exporter using `jsPDF`.
+
 
 ---
 
@@ -155,15 +171,16 @@ flowchart TD
 
 | Tier | Component / Framework | Details & Purpose |
 | :--- | :--- | :--- |
-| **Frontend UI** | **React 19 & TypeScript** | Dark sidebar layout, floating components, full type safety |
+| **Frontend UI** | **React 19 & TypeScript** | Dark sidebar layout, floating components, interactive CRAG trace |
 | **Build Tooling** | **Vite 6** | Instant HMR development server & production bundling |
 | **Styling** | **Tailwind CSS v4** | Midnight Blue `@theme` palette override + utility-first dark mode |
 | **Icons** | **Lucide React** | Modern scientific icon set |
 | **Node API Server** | **Express.js (Node.js)** | Express MVC API controllers & Vite middleware hosting (`Port 3000`) |
 | **Python Backend** | **FastAPI & Uvicorn** | Asynchronous OpenAPI engine with Swagger documentation (`Port 8000`) |
+| **RAG Orchestrator**| **LangGraph (CRAG)** | Cyclic state graph with relevance grading, query rewrite & fallback |
 | **Dense Embeddings** | **`BAAI/bge-large-en-v1.5`** | 1024-dimensional dense float vector embeddings |
-| **Vector Database** | **Qdrant Vector DB** | HNSW Graph Index with Cosine Distance & Payload Filtering |
-| **Primary LLM** | **Groq Cloud API** | `llama-3.3-70b-versatile` — 25s timeout + auto model fallback |
+| **Vector Database** | **Qdrant Vector DB** | AWS Cloud-hosted HNSW Graph Index with Cosine Distance |
+| **Primary LLM** | **Groq Cloud API** | `openai/gpt-oss-120b` (synthesis) + `openai/gpt-oss-20b` (grading) |
 | **Secondary LLM** | **Nvidia Nemotron 70B** | `nvidia/Llama-3.1-Nemotron-70B-Instruct-HF` via Hugging Face Router |
 | **PDF Exporter** | **jsPDF** | Client-side publication-ready PDF report generation |
 
@@ -182,8 +199,8 @@ HUGGINGFACEHUB_API_TOKEN=your_hf_token_here
 GROQ_API_KEY=your_groq_api_key_here
 
 # LLM & Embedding Models
+GROK_MODEL=openai/gpt-oss-120b
 NEMOTRON_MODEL=nvidia/Llama-3.1-Nemotron-70B-Instruct-HF
-GROK_MODEL=llama-3.3-70b-versatile
 EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
 
 # Web Server & Client Ports
@@ -191,9 +208,10 @@ PORT=3000
 NODE_ENV=development
 APP_URL=http://localhost:3000
 
-# Optional External Qdrant Vector DB (Leave empty for In-Memory Qdrant Collection)
-QDRANT_URL=
-QDRANT_API_KEY=
+# Qdrant Cloud Vector DB
+QDRANT_URL=https://<your-cluster-id>.<region>.aws.cloud.qdrant.io
+QDRANT_API_KEY=your_qdrant_api_key_here
+QDRANT_COLLECTION_NAME=paper_chunks
 ```
 
 ### Environment Variable Reference:
@@ -201,12 +219,14 @@ QDRANT_API_KEY=
 | Variable | Description | Required |
 | :--- | :--- | :--- |
 | `HF_TOKEN` | Hugging Face token for Nemotron & BAAI embeddings | **Yes** |
-| `GROQ_API_KEY` | Groq Cloud API key for Grok LLM (primary engine) | **Yes** |
+| `GROQ_API_KEY` | Groq Cloud API key for primary synthesis & CRAG grader | **Yes** |
+| `GROK_MODEL` | Primary Groq synthesis model (default: `openai/gpt-oss-120b`) | No |
 | `NEMOTRON_MODEL` | Hugging Face Nemotron model repo ID | No |
-| `GROK_MODEL` | Groq model name | No |
 | `EMBEDDING_MODEL` | Hugging Face embedding model repo ID | No |
 | `PORT` | Express server port | No (default: 3000) |
-| `QDRANT_URL` | External Qdrant DB URL (leave blank for in-memory) | No |
+| `QDRANT_URL` | Qdrant Cloud cluster endpoint | No |
+| `QDRANT_API_KEY` | Qdrant Cloud API key | No |
+| `QDRANT_COLLECTION_NAME` | Collection name for paper vectors (default: `paper_chunks`) | No |
 
 ---
 
