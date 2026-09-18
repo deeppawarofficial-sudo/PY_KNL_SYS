@@ -4,6 +4,7 @@ from typing import Optional, List, Dict, Any
 from services.vector_store import get_all_papers, search_vector_store
 from services.nemotron_llm import generate_nemotron_chat
 from services.grok_llm import generate_grok_chat
+from chains.chat_graph import run_chat_pipeline
 
 router = APIRouter(tags=["Knowledge & Chat"])
 
@@ -15,6 +16,7 @@ class ChatRequest(BaseModel):
     messages: List[ChatMessage]
     paperId: Optional[str] = None
     modelProvider: Optional[str] = "auto"  # 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
+    threadId: Optional[str] = None
 
 @router.get("/api/knowledge-graph")
 async def get_knowledge_graph():
@@ -67,8 +69,29 @@ async def chat_assistant(req: ChatRequest):
             raise HTTPException(status_code=400, detail="Messages array cannot be empty")
 
         last_user_message = req.messages[-1].content
-        selected_paper_ids = [req.paperId] if req.paperId else None
+        thread_id = req.threadId or (f"thread_paper_{req.paperId}" if req.paperId else "default_research_thread")
 
+        # Preferred path: LangGraph Stateful Chat with MemorySaver
+        if req.modelProvider in ("grok", "auto", "grounded", None):
+            history_dicts = [{"role": m.role, "content": m.content} for m in req.messages]
+            result = await run_chat_pipeline(
+                query=last_user_message,
+                thread_id=thread_id,
+                paper_id=req.paperId,
+                messages_history=history_dicts
+            )
+            return {
+                "answer": result["answer"],
+                "citations": result.get("citations", []),
+                "retrievedChunks": result.get("retrievedChunks", []),
+                "paperId": req.paperId,
+                "paperTitle": result.get("paperTitle") or "All Papers",
+                "threadId": thread_id,
+                "totalMessages": result.get("totalMessages", len(req.messages) + 1)
+            }
+
+        # Fallback to local nemotron chat if explicitly specified
+        selected_paper_ids = [req.paperId] if req.paperId else None
         chunks = search_vector_store(
             query=last_user_message,
             selected_paper_ids=selected_paper_ids,
@@ -92,18 +115,10 @@ async def chat_assistant(req: ChatRequest):
 
         context_str = "\n\n".join(context_lines)
         messages_history = [{"role": m.role, "content": m.content} for m in req.messages]
-
-        # Dispatch to selected model
-        if req.modelProvider == "grok":
-            answer = await generate_grok_chat(
-                messages_history=messages_history,
-                context_str=context_str
-            )
-        else:
-            answer = await generate_nemotron_chat(
-                messages_history=messages_history,
-                context_str=context_str
-            )
+        answer = await generate_nemotron_chat(
+            messages_history=messages_history,
+            context_str=context_str
+        )
 
         paper_title = None
         if req.paperId:
@@ -117,7 +132,8 @@ async def chat_assistant(req: ChatRequest):
             "citations": citations,
             "retrievedChunks": chunks,
             "paperId": req.paperId,
-            "paperTitle": paper_title
+            "paperTitle": paper_title,
+            "threadId": thread_id
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Nemotron Chat Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Chat Assistant Error: {str(e)}")

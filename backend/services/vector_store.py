@@ -83,6 +83,15 @@ def ensure_qdrant_collection(vector_size: int = 1024):
                 vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE)
             )
             print(f"[Qdrant] Created collection '{QDRANT_COLLECTION}' (Vector Dim: {vector_size}, Distance: COSINE)")
+        # Ensure payload index on paperId for filtering
+        try:
+            qdrant_client.create_payload_index(
+                collection_name=QDRANT_COLLECTION,
+                field_name="paperId",
+                field_schema="keyword"
+            )
+        except Exception:
+            pass
         _qdrant_initialized = True
     except Exception as e:
         print(f"[Qdrant] Collection creation notice: {e}")
@@ -261,6 +270,20 @@ def search_vector_store(
             qdrant_results = search_res.points
         except Exception as e:
             print(f"[Qdrant] Query error: {e}")
+            if query_filter is not None:
+                try:
+                    # Fallback: query without server filter and filter in Python
+                    search_res = qdrant_client.query_points(
+                        collection_name=QDRANT_COLLECTION,
+                        query=query_vec,
+                        limit=top_k * 5
+                    )
+                    qdrant_results = [
+                        p for p in search_res.points
+                        if (p.payload or {}).get("paperId") in selected_paper_ids
+                    ]
+                except Exception as inner_e:
+                    print(f"[Qdrant] Fallback query error: {inner_e}")
 
     # Process and re-rank with BM25 Keyword Matching
     results = []

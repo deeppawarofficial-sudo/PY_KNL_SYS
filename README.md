@@ -102,6 +102,12 @@ flowchart TD
    - Dynamic SVG Knowledge Graph networks mapped to active session papers.
    - Client-side PDF report exporter using `jsPDF`.
 
+7. **Stateful Multi-Turn Research Chat with LangGraph `MemorySaver`**:
+   - **Checkpointer Persistence**: Uses LangGraph's `MemorySaver` to checkpoint conversation turns by session `thread_id`.
+   - **Anaphoric & Pronoun Resolution**: Follow-up queries (e.g., *"Who proposed it and what does it eliminate?"*) maintain full context across previous turns without restating paper or algorithm names.
+   - **Paper Scoping**: Supports global repository chat or focused conversational Q&A scoped to an individual research manuscript.
+   - **High-Throughput Reasoning Engine**: Powered by Groq's `openai/gpt-oss-120b` for deep analysis with sub-second retrieval from Qdrant Cloud.
+
 
 ---
 
@@ -115,18 +121,20 @@ flowchart TD
 │   └── knowledge_graph.png
 │
 ├── backend/                        # Python FastAPI Backend Engine
-│   ├── chains/                     # Synthesis & Reasoning Chains
-│   │   ├── rag_synthesis.py        # Multi-paper RAG synthesis via Nemotron
+│   ├── chains/                     # LangGraph & Synthesis Reasoning Chains
+│   │   ├── crag_graph.py           # LangGraph Corrective RAG (CRAG) graph
+│   │   ├── chat_graph.py           # LangGraph Multi-Turn Chat with MemorySaver
+│   │   ├── rag_synthesis.py        # Multi-paper RAG synthesis
 │   │   ├── literature_review.py    # Automated literature review chain
 │   │   └── comparison_matrix.py    # Dynamic JSON matrix generation chain
 │   ├── routers/                    # FastAPI APIRouter Endpoints
 │   │   ├── arxiv.py                # ArXiv search & live paper import (/api/arxiv/*)
-│   │   ├── rag.py                  # RAG search, synthesis, review & matrix (/api/rag/*)
+│   │   ├── rag.py                  # RAG search, CRAG synthesis, review & matrix (/api/rag/*)
 │   │   ├── papers.py               # Paper collection management & PDF upload (/api/papers/*)
 │   │   └── knowledge.py            # Multi-turn chatbot & Knowledge Graph (/api/chat)
 │   ├── services/                   # Backend Logic Services
 │   │   ├── nemotron_llm.py         # Nvidia Nemotron LLM inference service
-│   │   ├── grok_llm.py             # Groq Cloud LLM inference service
+│   │   ├── grok_llm.py             # Groq Cloud LLM inference service (gpt-oss-120b + 20b)
 │   │   ├── vector_store.py         # BAAI/bge-large-en-v1.5 vector store & Qdrant HNSW
 │   │   └── arxiv_service.py        # Live ArXiv XML API fetcher & parser
 │   ├── main.py                     # FastAPI entrypoint (Port 8000)

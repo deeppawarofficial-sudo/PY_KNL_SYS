@@ -6,10 +6,40 @@ import { Citation } from '../../types.js';
 
 export async function chatWithPaper(req: Request, res: Response) {
   try {
-    const { messages, paperId, topK = 6, modelProvider } = req.body;
+    const { messages, paperId, topK = 6, modelProvider, threadId } = req.body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'Messages array is required for chat.' });
+    }
+
+    // 1. Preferred Path: Delegate to Python FastAPI Backend running LangGraph MemorySaver
+    try {
+      const fastApiRes = await fetch('http://127.0.0.1:8000/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages,
+          paperId: paperId || null,
+          modelProvider: modelProvider || 'grok',
+          threadId: threadId || undefined,
+        }),
+      });
+
+      if (fastApiRes.ok) {
+        const chatData = await fastApiRes.json();
+        return res.json({
+          answer: chatData.answer,
+          citations: chatData.citations || [],
+          retrievedChunks: chatData.retrievedChunks || [],
+          paperId: chatData.paperId || paperId || null,
+          paperTitle: chatData.paperTitle || 'All Papers',
+          threadId: chatData.threadId,
+          totalMessages: chatData.totalMessages,
+          engine: 'LangGraph MemorySaver (Groq openai/gpt-oss-120b)',
+        });
+      }
+    } catch (_fastApiErr) {
+      console.warn('[ChatController] FastAPI LangGraph chat offline, falling back to local runner.');
     }
 
     const lastUserMessage = [...messages].reverse().find((m) => m.role === 'user');

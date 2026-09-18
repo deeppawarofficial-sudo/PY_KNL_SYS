@@ -364,12 +364,16 @@ export async function sendChatMessage(params: {
   messages: Array<{ role: 'user' | 'assistant'; content: string }>;
   paperId?: string;
   modelProvider?: 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded';
+  threadId?: string;
 }): Promise<{
   answer: string;
   citations: Citation[];
   retrievedChunks: SearchResultChunk[];
   paperId?: string;
   paperTitle?: string;
+  threadId?: string;
+  engine?: string;
+  totalMessages?: number;
 }> {
   const res = await safeFetch('/api/chat', {
     method: 'POST',

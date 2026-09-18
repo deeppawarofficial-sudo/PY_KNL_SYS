@@ -56,12 +56,14 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
   isFloating = false,
   onCloseFloating
 }) => {
+  const [threadId, setThreadId] = useState<string>(() => 'thread_' + Math.random().toString(36).substring(2, 10));
+  const [activeEngine, setActiveEngine] = useState<string>('LangGraph MemorySaver');
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome-1',
       role: 'assistant',
       content:
-        'Hello! I am your **AI Research Assistant**. Ask me any question about the indexed research papers, algorithms, benchmark metrics, or methodology comparisons. I ground every response in retrieved vector excerpts with citations.',
+        'Hello! I am your **AI Research Assistant** powered by **LangGraph with MemorySaver thread persistence**. Ask me any question about the indexed research papers, algorithms, or methodology comparisons. I remember conversational context across turns and ground responses with citations.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -108,8 +110,17 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
 
       const res = await sendChatMessage({
         messages: messageHistory,
-        paperId: activeScopePaperId
+        paperId: activeScopePaperId,
+        threadId,
+        modelProvider: 'grok',
       });
+
+      if (res.threadId) {
+        setThreadId(res.threadId);
+      }
+      if (res.engine) {
+        setActiveEngine(res.engine);
+      }
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,
@@ -137,12 +148,14 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
   };
 
   const handleClear = () => {
+    const newThread = 'thread_' + Math.random().toString(36).substring(2, 10);
+    setThreadId(newThread);
     setMessages([
       {
         id: `welcome-${Date.now()}`,
         role: 'assistant',
         content:
-          'Chat history cleared. What paper or research question would you like to explore next?',
+          'Chat history cleared and new MemorySaver session initialized. What paper or research question would you like to explore next?',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
@@ -210,11 +223,16 @@ export const ResearchChatbot: React.FC<ResearchChatbotProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold tracking-tight text-white">Research Paper Chatbot</h3>
-              <span className="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded">
-                RAG Active
+              <span className="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                MemorySaver Active
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">Grounded Q&A over indexed paper repository</p>
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+              <span className="truncate max-w-[180px]">{activeEngine}</span>
+              <span>•</span>
+              <span className="font-mono text-[10px] text-slate-500">ID: {threadId.slice(0, 12)}...</span>
+            </div>
           </div>
         </div>
 
