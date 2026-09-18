@@ -2,7 +2,7 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { Citation, SearchResultChunk, SynthesisResult, ComparisonMatrix } from '../types';
 import { exportSynthesisPDF } from '../utils/pdfExport';
-import { BookOpen, CheckCircle2, AlertTriangle, Clock, Layers, Share2, Copy, Sparkles, ExternalLink, FileText, Download } from 'lucide-react';
+import { BookOpen, CheckCircle2, AlertTriangle, Clock, Layers, Share2, Copy, Sparkles, ExternalLink, FileText, Download, ChevronDown, ChevronUp, Cpu } from 'lucide-react';
 
 interface SynthesizedResponseViewProps {
   result: SynthesisResult;
@@ -16,6 +16,7 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
   onPaperClick,
 }) => {
   const [copied, setCopied] = React.useState(false);
+  const [showTrace, setShowTrace] = React.useState(true);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(result.answer);
@@ -88,6 +89,57 @@ export const SynthesizedResponseView: React.FC<SynthesizedResponseViewProps> = (
           </button>
         </div>
       </div>
+
+      {/* LangGraph Corrective RAG (CRAG) Execution Trace */}
+      {result.cragTrace && result.cragTrace.length > 0 && (
+        <div className="bg-slate-900 border border-blue-900/40 rounded-xl p-4 shadow-2xs space-y-3">
+          <button
+            onClick={() => setShowTrace(!showTrace)}
+            className="w-full flex items-center justify-between text-left cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="text-xs font-bold font-mono uppercase tracking-wider text-blue-400">
+                LangGraph Corrective RAG (CRAG) Decision Trace
+              </span>
+              <span className="px-1.5 py-0.5 text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800 rounded">
+                {result.cragTrace.length} Nodes Executed
+              </span>
+            </div>
+            <div className="text-slate-400 hover:text-slate-200">
+              {showTrace ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </div>
+          </button>
+
+          {showTrace && (
+            <div className="pt-2 border-t border-slate-800 space-y-1.5 font-mono text-xs">
+              {result.cragTrace.map((step, idx) => {
+                const isGrade = step.includes('[Grade]');
+                const isRewrite = step.includes('[Rewrite]');
+                const isFallback = step.includes('[ArXiv Fallback]');
+                const isSynth = step.includes('[Synthesize]');
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2 text-slate-300 py-1.5 px-2.5 rounded bg-slate-950/60 border border-slate-800/80"
+                  >
+                    <span className="text-slate-500 select-none">{idx + 1}.</span>
+                    <span className={
+                      isGrade ? 'text-amber-300' :
+                      isRewrite ? 'text-purple-300' :
+                      isFallback ? 'text-cyan-300' :
+                      isSynth ? 'text-emerald-300' :
+                      'text-blue-300'
+                    }>
+                      {step}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Main Synthesized Content */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-2xs space-y-6">

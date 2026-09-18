@@ -77,7 +77,7 @@ export const LiteratureReviewModal: React.FC<LiteratureReviewModalProps> = ({ on
                   onChange={(e) => setModelProvider(e.target.value as any)}
                   className="bg-slate-900 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs font-medium outline-none focus:border-blue-500 cursor-pointer"
                 >
-                  <option value="grok">🚀 Grok (Groq: llama-3.3-70b-versatile)</option>
+                  <option value="grok">🚀 Groq (openai/gpt-oss-120b)</option>
                   <option value="nemotron">☁️ HG Nemotron (Nvidia Nemotron 70B)</option>
                   <option value="grounded">📄 Grounded Academic RAG Engine</option>
                 </select>

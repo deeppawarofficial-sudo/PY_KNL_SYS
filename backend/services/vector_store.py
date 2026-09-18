@@ -1,5 +1,13 @@
 import os
+from dotenv import load_dotenv
+
+# Load from backend/.env or root .env
+load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), ".env"))
+
 os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 os.environ["TRANSFORMERS_NO_TF"] = "1"
 os.environ["USE_TF"] = "0"
 

@@ -1,17 +1,19 @@
 import os
 from typing import List, Dict
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-DEFAULT_GROK_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_GROK_MODEL = "openai/gpt-oss-120b"
 
 FALLBACK_MODELS = [
-    "llama-3.1-8b-instant",
-    "gemma2-9b-it",
-    "mixtral-8x7b-32768",
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.8-27b",
 ]
 
 

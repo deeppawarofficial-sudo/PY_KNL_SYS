@@ -14,3 +14,5 @@ xmltodict>=0.13.0
 qdrant-client>=1.8.0
 groq>=0.9.0
 langchain-groq>=0.1.0
+langgraph>=0.2.0
+

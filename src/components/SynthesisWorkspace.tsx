@@ -182,7 +182,7 @@ export const SynthesisWorkspace: React.FC<SynthesisWorkspaceProps> = ({
                 onChange={(e) => setModelProvider(e.target.value as any)}
                 className="bg-blue-50/70 border border-blue-200 rounded px-2.5 py-1 text-blue-950 font-semibold text-xs outline-none focus:border-blue-500 cursor-pointer shadow-2xs"
               >
-                <option value="grok">🚀 Grok (Groq: llama-3.3-70b-versatile)</option>
+                <option value="grok">🚀 Groq (openai/gpt-oss-120b)</option>
                 <option value="nemotron">☁️ HG Nemotron (Nvidia Nemotron 70B)</option>
                 <option value="grounded">📄 Grounded Academic RAG Engine</option>
               </select>

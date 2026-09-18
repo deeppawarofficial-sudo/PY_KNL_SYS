@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const DEFAULT_NEMOTRON_MODEL = process.env.NEMOTRON_MODEL || 'meta-llama/Llama-3.3-70B-Instruct';
-const DEFAULT_GROK_MODEL = process.env.GROK_MODEL || 'llama-3.3-70b-versatile';
+const DEFAULT_GROK_MODEL = process.env.GROK_MODEL || 'openai/gpt-oss-120b';
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 function getGroqApiKey(): string {
@@ -129,7 +129,7 @@ export async function callNemotronLlm(params: {
   prompt?: string;
   temperature?: number;
   maxTokens?: number;
-  modelProvider?: 'auto' | 'nemotron' | 'grok' | 'grounded';
+  modelProvider?: 'auto' | 'nemotron' | 'grok' | 'grounded' | 'ollama';
 }): Promise<string> {
   const token = getHfToken();
   const provider = params.modelProvider || 'auto';
@@ -161,7 +161,9 @@ export async function callNemotronLlm(params: {
     if (!groqKey) {
       return '### ⚠️ Groq API Key Missing\n\nPlease set `GROQ_API_KEY` in your `.env` file.\n\n*(Select another model engine or add your Groq API key)*';
     }
-    const groqModels = [DEFAULT_GROK_MODEL, 'llama-3.1-8b-instant', 'gemma2-9b-it'];
+    const defaultModel = process.env.GROK_MODEL || DEFAULT_GROK_MODEL;
+    const groqModels = [defaultModel, 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
+    let lastError = '';
     for (const grokModel of groqModels) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
@@ -190,18 +192,21 @@ export async function callNemotronLlm(params: {
           }
         } else {
           const errText = await response.text().catch(() => '');
+          lastError = `HTTP ${response.status}: ${errText.slice(0, 200)}`;
           console.warn(`⚠️ Groq API error (${grokModel}) HTTP ${response.status}: ${errText.slice(0, 200)}`);
         }
       } catch (err: any) {
         clearTimeout(timeoutId);
         if (err.name === 'AbortError') {
+          lastError = 'Timeout (25s limit reached)';
           console.warn(`⚠️ Groq API timeout (${grokModel}) after 25s — trying next model...`);
         } else {
+          lastError = err.message || String(err);
           console.warn(`⚠️ Groq API fetch error (${grokModel}): ${err.message}`);
         }
       }
     }
-    return '### ⚠️ Groq API Unavailable\n\nAll Groq model attempts failed or timed out (25s limit). Please check your `GROQ_API_KEY` and network connection.';
+    return `### ⚠️ Groq API Unavailable\n\nAll Groq model attempts failed or timed out (25s limit).\n\n**Details:** ${lastError || 'No response'}\n\nPlease check your \`GROQ_API_KEY\` and restart the server.`;
   }
 
   // Explicit Provider or Priority 1: Check Local Ollama / LM Studio endpoints

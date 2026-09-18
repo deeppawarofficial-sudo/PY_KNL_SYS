@@ -6,6 +6,7 @@ from services.vector_store import search_vector_store, get_all_papers
 from chains.rag_synthesis import run_rag_synthesis
 from chains.literature_review import run_literature_review
 from chains.comparison_matrix import run_comparison_matrix
+from chains.crag_graph import run_crag_pipeline
 from services.grok_llm import generate_grok_response
 
 router = APIRouter(prefix="/api/rag", tags=["RAG & Nemotron"])
@@ -20,6 +21,8 @@ class RagSynthesizeRequest(BaseModel):
     query: str
     paperIds: Optional[List[str]] = None
     modelProvider: Optional[str] = "auto"  # 'auto' | 'ollama' | 'nemotron' | 'grok' | 'grounded'
+    enableCrag: Optional[bool] = True
+
 
 class LitReviewRequest(BaseModel):
     topicCategory: Optional[str] = "All"
@@ -64,7 +67,24 @@ async def rag_synthesize(req: RagSynthesizeRequest):
 
         context_str = "\n\n".join(context_lines)
 
-        # Dispatch to the selected model engine
+        # Dispatch to LangGraph Corrective RAG (CRAG) for Groq
+        if req.enableCrag and req.modelProvider in ("grok", "auto"):
+            crag_res = await run_crag_pipeline(query=req.query, paper_ids=paper_ids)
+            elapsed_ms = int((time.time() - start_time) * 1000)
+            return {
+                "query": req.query,
+                "answer": crag_res.get("generation", ""),
+                "citations": crag_res.get("citations", []),
+                "retrievedChunks": crag_res.get("citations", []),
+                "papersUsedCount": len(set([c.get("paperId", "") for c in crag_res.get("citations", [])])),
+                "executionTimeMs": elapsed_ms,
+                "cragTrace": crag_res.get("trace", []),
+                "sourceType": crag_res.get("sourceType", "vector_store"),
+                "externalSourceUsed": crag_res.get("externalSourceUsed", False),
+                "modelEngine": "Groq LangGraph CRAG (openai/gpt-oss-120b + 20b)"
+            }
+
+        # Legacy Linear Fallback
         if req.modelProvider == "grok":
             system_prompt = (
                 "You are an elite AI Research Assistant powered by Groq (Grok) LLM. "
@@ -85,7 +105,8 @@ async def rag_synthesize(req: RagSynthesizeRequest):
             "citations": citations,
             "retrievedChunks": chunks,
             "papersUsedCount": len(set([c["paperId"] for c in chunks])),
-            "executionTimeMs": elapsed_ms
+            "executionTimeMs": elapsed_ms,
+            "modelEngine": "Linear RAG Pipeline"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Nemotron Synthesis Error: {str(e)}")

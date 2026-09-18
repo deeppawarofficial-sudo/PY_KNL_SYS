@@ -28,6 +28,38 @@ export async function synthesizeRag(req: Request, res: Response) {
       return res.status(400).json({ error: 'Research query is required' });
     }
 
+    // 1. Delegate to Python FastAPI Backend running LangGraph Corrective RAG (CRAG)
+    try {
+      const fastApiRes = await fetch('http://127.0.0.1:8000/api/rag/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query,
+          paperIds,
+          modelProvider: modelProvider || 'grok',
+          enableCrag: true,
+        }),
+      });
+      if (fastApiRes.ok) {
+        const cragData = await fastApiRes.json();
+        return res.json({
+          id: `synth-${Date.now()}`,
+          query,
+          answer: cragData.answer,
+          citations: cragData.citations || [],
+          retrievedChunksCount: cragData.citations?.length || 0,
+          papersUsedCount: cragData.papersUsedCount || 1,
+          executionTimeMs: cragData.executionTimeMs || Date.now() - startTime,
+          modelEngine: cragData.modelEngine || 'Groq LangGraph CRAG (openai/gpt-oss-120b + 20b)',
+          cragTrace: cragData.cragTrace || [],
+          sourceType: cragData.sourceType || 'vector_store',
+          externalSourceUsed: cragData.externalSourceUsed || false,
+        });
+      }
+    } catch (_fastApiErr) {
+      // Fallback to local in-memory execution if FastAPI is offline
+    }
+
     const retrievedChunks = searchVectorStore(query, paperIds, topK, minSimilarity, enableHybrid);
 
     if (retrievedChunks.length === 0) {

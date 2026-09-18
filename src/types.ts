@@ -76,6 +76,8 @@ export interface SynthesisResult {
   executionTimeMs: number;
   papersUsedCount: number;
   timestamp: string;
+  cragTrace?: string[];
+  modelEngine?: string;
 }
 
 export interface KnowledgeGraphNode {
